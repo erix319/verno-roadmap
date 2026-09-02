@@ -89,11 +89,8 @@
   border: 2px solid var(--color-text);
 }
 
-.schedule-controls__presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem;
-  list-style: none;
+.schedule-controls__title {
+  grid-column: 1 / -1;
 }
 
 .schedule-controls__fields {

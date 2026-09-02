@@ -7,12 +7,6 @@ interface ScheduleControlsProps {
   onResetProgress: () => void
 }
 
-const PRESETS = [
-  { label: 'Сначала фриланс', share: 70, hint: '70 % недели треку A' },
-  { label: 'Поровну', share: 50, hint: '50 на 50' },
-  { label: 'Сначала рост', share: 30, hint: '70 % недели треку B' },
-]
-
 function toBoundedNumber(value: string, min: number, max: number, fallback: number): number {
   const parsed = Number(value)
   if (value === '' || !Number.isFinite(parsed)) return fallback
@@ -25,7 +19,7 @@ export function ScheduleControls({ settings, onChange, onResetProgress }: Schedu
 
   return (
     <section className="schedule-controls" aria-labelledby="controls-title">
-      <h2 id="controls-title" className="visually-hidden">Настройки расписания</h2>
+      <h2 id="controls-title" className="schedule-controls__title">Настройки расписания</h2>
 
       <div className="schedule-controls__share">
         <div className="schedule-controls__share-header">
@@ -45,24 +39,6 @@ export function ScheduleControls({ settings, onChange, onResetProgress }: Schedu
           style={{ '--share-a': `${settings.shareA}%` } as CSSProperties}
           onChange={(event) => update({ shareA: Number(event.target.value) })}
         />
-        <ul className="schedule-controls__presets">
-          {PRESETS.map((preset) => {
-            const isActive = settings.shareA === preset.share
-            return (
-              <li key={preset.share}>
-                <button
-                  type="button"
-                  className={`button${isActive ? ' button--active' : ''}`}
-                  aria-pressed={isActive}
-                  title={preset.hint}
-                  onClick={() => update({ shareA: preset.share })}
-                >
-                  {preset.label}
-                </button>
-              </li>
-            )
-          })}
-        </ul>
       </div>
 
       <fieldset className="schedule-controls__fields">

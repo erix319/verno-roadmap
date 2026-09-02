@@ -9,6 +9,19 @@
   border-radius: var(--radius-md);
 }
 
+.recommendation__why {
+  margin-block-start: calc(-1 * var(--spacing-sm));
+}
+
+.recommendation__why-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.recommendation__why[open] .recommendation__reasons {
+  margin-block-start: var(--spacing-sm);
+}
+
 .recommendation__reasons {
   display: grid;
   gap: var(--spacing-sm);

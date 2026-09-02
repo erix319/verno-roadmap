@@ -29,7 +29,12 @@ export function Recommendation({ plan, settings, done, skipped, onChange }: Reco
     <section className="recommendation" aria-labelledby="recommendation-title">
       <p className="eyebrow">С чего начать</p>
       <h2 id="recommendation-title">Начинай с трека A, трек B веди фоном</h2>
-      <ul className="recommendation__reasons">
+      <details className="recommendation__why">
+        <summary className="section-fold__summary">
+          <span className="recommendation__why-title">Почему так — четыре причины</span>
+          <span className="section-fold__hint" aria-hidden="true" />
+        </summary>
+        <ul className="recommendation__reasons">
         <li>
           <strong>Трек A платит сразу.</strong> Tilda уже пройдена — лендинги можно продавать с первого дня, а ближайшая веха
           {firstMilestoneA ? ` «${firstMilestoneA.item.title.replace('В прайсе: ', '')}» расширит прайс уже к ${fmtDate(firstMilestoneA.finish)}` : ' уже закрыта'}.
@@ -41,11 +46,12 @@ export function Recommendation({ plan, settings, done, skipped, onChange }: Reco
         <li>
           <strong>Но не откладывай B на потом.</strong> JS и Node из трека B усиливают и заказы трека A: интеграции, боты, личные кабинеты. Поэтому фоном, а не «после».
         </li>
-        <li>
-          <strong>Раз в неделю сверяйся с парсером заказов.</strong> Если реальный спрос выглядит иначе — поменяй стартовый трек или сдвинь ползунок в настройках, все даты
-          пересчитаются.
-        </li>
-      </ul>
+          <li>
+            <strong>Раз в неделю сверяйся с парсером заказов.</strong> Если реальный спрос выглядит иначе — поменяй стартовый трек или сдвинь ползунок в настройках, все даты
+            пересчитаются.
+          </li>
+        </ul>
+      </details>
 
       <fieldset className="recommendation__start">
         <legend className="recommendation__legend">Выбери стартовый трек — даты финиша пересчитаются во всём плане</legend>
