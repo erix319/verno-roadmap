@@ -12,6 +12,7 @@ import {
   saveDone,
   saveSettings,
   saveSkipped,
+  sanitizeSettings,
   type CustomReminder,
 } from './storage'
 import { AppNav } from './components/AppNav'
@@ -22,7 +23,8 @@ import { Timeline } from './components/Timeline'
 import { TrackCard } from './components/TrackCard'
 import { TrackPage } from './components/TrackPage'
 import { SkippedSection } from './components/SkippedSection'
-import { buildReminderViews, ReminderBanner, RemindersSection } from './components/Reminders'
+import { BackupSection } from './components/BackupSection'
+import { buildReminderViews, countDueReminders, ReminderBanner, RemindersSection } from './components/Reminders'
 import { ROUTE_META, useRoute } from './router'
 
 export default function App() {
@@ -31,6 +33,7 @@ export default function App() {
   const [settings, setSettings] = useState<Settings>(loadSettings)
   const [dismissedReminders, setDismissedReminders] = useState<Record<string, boolean>>(loadDismissedReminders)
   const [customReminders, setCustomReminders] = useState<CustomReminder[]>(loadCustomReminders)
+  const [pendingReminderScroll, setPendingReminderScroll] = useState(false)
   const route = useRoute()
   const pageRef = useRef<HTMLDivElement>(null)
   const isFirstRender = useRef(true)
@@ -50,6 +53,13 @@ export default function App() {
     window.scrollTo({ top: 0 })
     pageRef.current?.focus({ preventScroll: true })
   }, [route])
+
+  useEffect(() => {
+    if (pendingReminderScroll && route === 'home') {
+      document.getElementById('reminders-title')?.scrollIntoView({ block: 'start' })
+      setPendingReminderScroll(false)
+    }
+  }, [pendingReminderScroll, route])
 
   const plan = useMemo(() => buildPlan(settings, done, skipped), [settings, done, skipped])
 
@@ -96,9 +106,41 @@ export default function App() {
     })
   }
 
+  const openReminders = () => {
+    if (route !== 'home') window.location.hash = ROUTE_META.home.hash
+    setPendingReminderScroll(true)
+  }
+
+  const exportData = () => JSON.stringify({ v: 1, done, skipped, settings, customReminders, dismissedReminders })
+
+  const importData = (raw: string): boolean => {
+    try {
+      const parsed = JSON.parse(raw)
+      if (!parsed || typeof parsed !== 'object') return false
+      if (parsed.done && typeof parsed.done === 'object') setDone(parsed.done as DoneMap)
+      if (parsed.skipped && typeof parsed.skipped === 'object') setSkipped(parsed.skipped as SkippedMap)
+      if (parsed.settings) setSettings(sanitizeSettings(parsed.settings))
+      if (Array.isArray(parsed.customReminders))
+        setCustomReminders(
+          parsed.customReminders.filter(
+            (entry: unknown): entry is CustomReminder =>
+              !!entry &&
+              typeof (entry as CustomReminder).id === 'string' &&
+              typeof (entry as CustomReminder).date === 'string' &&
+              typeof (entry as CustomReminder).text === 'string',
+          ),
+        )
+      if (parsed.dismissedReminders && typeof parsed.dismissedReminders === 'object')
+        setDismissedReminders(parsed.dismissedReminders as Record<string, boolean>)
+      return true
+    } catch {
+      return false
+    }
+  }
+
   return (
     <div className="container">
-      <AppNav route={route} plan={plan} />
+      <AppNav route={route} plan={plan} dueReminders={countDueReminders(reminders, dismissedReminders)} onBellClick={openReminders} />
       <ReminderBanner reminders={reminders} dismissed={dismissedReminders} onDismiss={toggleReminderDismiss} />
       <div className="page" ref={pageRef} tabIndex={-1}>
         {route === 'home' ? (
@@ -126,6 +168,7 @@ export default function App() {
                 onAdd={addReminder}
                 onDelete={deleteReminder}
               />
+              <BackupSection onExport={exportData} onImport={importData} />
               <SkippedSection />
             </main>
           </>

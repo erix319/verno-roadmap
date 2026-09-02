@@ -140,6 +140,30 @@
   font-size: var(--font-size-sm);
 }
 
+.backup__area {
+  width: 100%;
+  padding: var(--spacing-sm) 0.625rem;
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  resize: vertical;
+}
+
+.backup__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-block-start: var(--spacing-sm);
+}
+
+.backup__message {
+  margin-block-start: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
 @media (min-width: 48rem) {
   .reminder-list__item {
     grid-template-columns: 8.5rem 1fr auto;

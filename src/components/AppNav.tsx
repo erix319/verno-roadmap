@@ -5,9 +5,12 @@ import { ROUTE_META, type Route } from '../router'
 interface AppNavProps {
   route: Route
   plan: Plan
+  /** Сколько напоминаний наступило и не скрыто */
+  dueReminders: number
+  onBellClick: () => void
 }
 
-export function AppNav({ route, plan }: AppNavProps) {
+export function AppNav({ route, plan, dueReminders, onBellClick }: AppNavProps) {
   const percentOf = (trackId: TrackId) => {
     const track = plan.tracks[trackId]
     return track.total ? Math.round((track.done / track.total) * 100) : 0
@@ -30,6 +33,17 @@ export function AppNav({ route, plan }: AppNavProps) {
             </a>
           </li>
         ))}
+        <li className="app-nav__bell-item">
+          <button
+            type="button"
+            className="app-nav__link app-nav__bell"
+            onClick={onBellClick}
+            aria-label={dueReminders > 0 ? `Напоминания: ${dueReminders} наступило` : 'Напоминания'}
+          >
+            <span aria-hidden="true">🔔</span>
+            {dueReminders > 0 && <span className="app-nav__bell-count">{dueReminders}</span>}
+          </button>
+        </li>
       </ul>
     </nav>
   )

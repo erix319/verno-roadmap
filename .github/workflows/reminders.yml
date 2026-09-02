@@ -26,6 +26,8 @@ jobs:
             exit 0
           fi
           TODAY=$(date -u +%F)
+          DOW=$(date -u +%u)
+          DOM=$(date -u +%-d)
           COUNT=0
           while IFS= read -r row; do
             TITLE=$(echo "$row" | jq -r '.title')
@@ -37,5 +39,9 @@ jobs:
               --data-urlencode "chat_id=${CHAT_ID}" \
               --data-urlencode "text=${MSG}" > /dev/null
             COUNT=$((COUNT + 1))
-          done < <(jq -c --arg today "$TODAY" '.[] | select(.date == $today)' src/reminders.json)
-          echo "Дата ${TODAY}, отправлено напоминаний: ${COUNT}"
+          done < <(jq -c --arg today "$TODAY" --arg dow "$DOW" --arg dom "$DOM" '.[] | select(
+            ((.date // "") == $today) or
+            ((.repeat // "") == "weekly" and ((.weekday // -1) | tostring) == $dow) or
+            ((.repeat // "") == "monthly" and ((.day // -1) | tostring) == $dom)
+          )' src/reminders.json)
+          echo "Дата ${TODAY} (день недели ${DOW}, число ${DOM}), отправлено напоминаний: ${COUNT}"

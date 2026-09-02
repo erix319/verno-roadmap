@@ -515,15 +515,21 @@ import remindersJson from './reminders.json'
 
 export interface Reminder {
   id: string
-  /** ISO-дата, с которой напоминание считается наступившим */
-  date: string
+  /** ISO-дата разового напоминания (наступает с этой даты) */
+  date?: string
+  /** Повторяющееся: weekly — по дню недели, monthly — по числу месяца */
+  repeat?: 'weekly' | 'monthly'
+  /** День недели для weekly: 1 = понедельник … 7 = воскресенье */
+  weekday?: number
+  /** Число месяца для monthly: 1–28 */
+  day?: number
   title: string
   text?: string
   link?: { hash: string; label: string }
 }
 
 /** Общие напоминания живут в reminders.json — его же читает workflow телеграм-бота */
-export const REMINDERS: Reminder[] = remindersJson
+export const REMINDERS: Reminder[] = remindersJson as Reminder[]
 
 export const SKIPPED = [
   { title: 'WordPress Development 2026', meta: 'Madani · 14,5 ч', why: 'дубль Сокирки и Schiff; headless-часть — при заказе' },

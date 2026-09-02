@@ -44,3 +44,29 @@
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
 }
+
+.app-nav__bell-item {
+  margin-inline-start: auto;
+}
+
+.app-nav__bell {
+  background: none;
+  cursor: pointer;
+}
+
+.app-nav__bell:hover {
+  border-color: var(--color-border);
+}
+
+.app-nav__bell-count {
+  min-width: 1.1rem;
+  padding: 0 0.25rem;
+  background: var(--color-track-a);
+  border-radius: 999px;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--color-on-accent);
+}

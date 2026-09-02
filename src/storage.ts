@@ -92,18 +92,22 @@ export function saveCustomReminders(reminders: CustomReminder[]): void {
   }
 }
 
+export function sanitizeSettings(parsed: Partial<Settings> | null | undefined): Settings {
+  if (!parsed || typeof parsed !== 'object') return DEFAULT_SETTINGS
+  return {
+    start: typeof parsed.start === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(parsed.start) ? parsed.start : DEFAULT_SETTINGS.start,
+    hoursBefore: clamp(Number(parsed.hoursBefore), 1, 80, DEFAULT_SETTINGS.hoursBefore),
+    hoursAfter: clamp(Number(parsed.hoursAfter), 1, 80, DEFAULT_SETTINGS.hoursAfter),
+    shareA: clamp(Number(parsed.shareA), 0, 100, DEFAULT_SETTINGS.shareA),
+    includeOptional: typeof parsed.includeOptional === 'boolean' ? parsed.includeOptional : DEFAULT_SETTINGS.includeOptional,
+  }
+}
+
 export function loadSettings(): Settings {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY)
     if (!raw) return DEFAULT_SETTINGS
-    const parsed = JSON.parse(raw) as Partial<Settings>
-    return {
-      start: typeof parsed.start === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(parsed.start) ? parsed.start : DEFAULT_SETTINGS.start,
-      hoursBefore: clamp(Number(parsed.hoursBefore), 1, 80, DEFAULT_SETTINGS.hoursBefore),
-      hoursAfter: clamp(Number(parsed.hoursAfter), 1, 80, DEFAULT_SETTINGS.hoursAfter),
-      shareA: clamp(Number(parsed.shareA), 0, 100, DEFAULT_SETTINGS.shareA),
-      includeOptional: typeof parsed.includeOptional === 'boolean' ? parsed.includeOptional : DEFAULT_SETTINGS.includeOptional,
-    }
+    return sanitizeSettings(JSON.parse(raw) as Partial<Settings>)
   } catch {
     return DEFAULT_SETTINGS
   }

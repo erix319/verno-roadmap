@@ -35,6 +35,8 @@ Workflow `.github/workflows/reminders.yml` раз в день (06:00 UTC) чит
 
 Проверка: **Actions → Telegram reminders → Run workflow** — в лог упадёт «отправлено: N» (для теста поставь в `src/reminders.json` напоминание с сегодняшней датой).
 
+Формат напоминаний в `src/reminders.json`: разовые — с полем `date` (ISO-дата); повторяющиеся — `"repeat": "weekly"` + `weekday` (1 = понедельник … 7) или `"repeat": "monthly"` + `day` (число месяца, 1–28).
+
 Нюансы: напоминания, добавленные формой на сайте, живут в localStorage браузера и в Telegram не попадают — общие держи в `src/reminders.json`; GitHub отключает cron-workflow после ~60 дней без коммитов в репозитории (придёт письмо с кнопкой включить обратно).
 
 ## Структура

@@ -5,29 +5,65 @@ import type { CustomReminder } from '../storage'
 
 export interface ReminderView {
   id: string
-  date: string
+  date?: string
+  repeat?: 'weekly' | 'monthly'
+  weekday?: number
+  day?: number
   title: string
   text?: string
   link?: { hash: string; label: string }
   custom: boolean
 }
 
+const WEEKDAYS_SHORT = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс']
+
+/** День недели по ISO: 1 = понедельник … 7 = воскресенье */
+function isoWeekday(date: Date): number {
+  return ((date.getDay() + 6) % 7) + 1
+}
+
 export function buildReminderViews(custom: CustomReminder[]): ReminderView[] {
   const builtin: ReminderView[] = REMINDERS.map((reminder) => ({ ...reminder, custom: false }))
   const own: ReminderView[] = custom.map((reminder) => ({ id: reminder.id, date: reminder.date, title: reminder.text, custom: true }))
-  return [...builtin, ...own].sort((a, b) => a.date.localeCompare(b.date))
+  return [...builtin, ...own].sort((a, b) => (a.date ?? '').localeCompare(b.date ?? ''))
+}
+
+/** Наступило ли напоминание сегодня (для повторяющихся — совпадает ли день) */
+function isDueToday(reminder: ReminderView, now: Date, todayIso: string): boolean {
+  if (reminder.repeat === 'weekly') return isoWeekday(now) === reminder.weekday
+  if (reminder.repeat === 'monthly') return now.getDate() === reminder.day
+  return !!reminder.date && reminder.date <= todayIso
+}
+
+/** Ключ скрытия: разовые скрываются навсегда, повторяющиеся — до следующего раза */
+export function dismissKey(reminder: ReminderView, todayIso: string): string {
+  return reminder.repeat ? `${reminder.id}@${todayIso}` : reminder.id
+}
+
+/** Сколько напоминаний наступило и не скрыто — для счётчика на колокольчике */
+export function countDueReminders(reminders: ReminderView[], dismissed: Record<string, boolean>): number {
+  const now = new Date()
+  const today = todayISO()
+  return reminders.filter((reminder) => isDueToday(reminder, now, today) && !dismissed[dismissKey(reminder, today)]).length
+}
+
+function scheduleLabel(reminder: ReminderView): string {
+  if (reminder.repeat === 'weekly') return `каждый ${WEEKDAYS_SHORT[(reminder.weekday ?? 1) - 1]}`
+  if (reminder.repeat === 'monthly') return `каждое ${reminder.day ?? 1}-е`
+  return reminder.date ? fmtDateYear(parseISO(reminder.date)) : '—'
 }
 
 interface ReminderBannerProps {
   reminders: ReminderView[]
   dismissed: Record<string, boolean>
-  onDismiss: (id: string) => void
+  onDismiss: (key: string) => void
 }
 
 /** Баннер под навигацией: напоминания, чья дата наступила и которые не скрыты */
 export function ReminderBanner({ reminders, dismissed, onDismiss }: ReminderBannerProps) {
+  const now = new Date()
   const today = todayISO()
-  const due = reminders.filter((reminder) => reminder.date <= today && !dismissed[reminder.id])
+  const due = reminders.filter((reminder) => isDueToday(reminder, now, today) && !dismissed[dismissKey(reminder, today)])
   if (due.length === 0) return null
 
   return (
@@ -41,8 +77,8 @@ export function ReminderBanner({ reminders, dismissed, onDismiss }: ReminderBann
           {reminder.text && <p className="reminder-banner__text">{reminder.text}</p>}
           <p className="reminder-banner__actions">
             {reminder.link && <a href={reminder.link.hash}>{reminder.link.label}</a>}
-            <button type="button" className="reminder-banner__dismiss" onClick={() => onDismiss(reminder.id)}>
-              скрыть
+            <button type="button" className="reminder-banner__dismiss" onClick={() => onDismiss(dismissKey(reminder, today))}>
+              {reminder.repeat ? 'скрыть до следующего раза' : 'скрыть'}
             </button>
           </p>
         </div>
@@ -54,7 +90,7 @@ export function ReminderBanner({ reminders, dismissed, onDismiss }: ReminderBann
 interface RemindersSectionProps {
   reminders: ReminderView[]
   dismissed: Record<string, boolean>
-  onToggleDismiss: (id: string) => void
+  onToggleDismiss: (key: string) => void
   onAdd: (date: string, text: string) => void
   onDelete: (id: string) => void
 }
@@ -62,6 +98,7 @@ interface RemindersSectionProps {
 export function RemindersSection({ reminders, dismissed, onToggleDismiss, onAdd, onDelete }: RemindersSectionProps) {
   const [date, setDate] = useState('')
   const [text, setText] = useState('')
+  const now = new Date()
   const today = todayISO()
 
   const submit = (event: FormEvent) => {
@@ -77,27 +114,27 @@ export function RemindersSection({ reminders, dismissed, onToggleDismiss, onAdd,
       <div className="page-section__header">
         <h2 id="reminders-title">Напоминалки</h2>
         <p className="section-lead">
-          Когда дата наступает, напоминание всплывает баннером на любой странице плана. Хранятся здесь же, в localStorage.
+          Когда дата наступает, напоминание всплывает баннером на любой странице. Общие (включая повторяющиеся) дублируются в Telegram, если настроен бот;
+          добавленные формой живут только в этом браузере.
         </p>
       </div>
 
       <ul className="reminder-list">
         {reminders.map((reminder) => {
-          const isDue = reminder.date <= today
-          const isHidden = !!dismissed[reminder.id]
-          const status = isHidden ? 'скрыто' : isDue ? 'наступило' : 'ждёт'
+          const due = isDueToday(reminder, now, today)
+          const key = dismissKey(reminder, today)
+          const isHidden = !!dismissed[key]
+          const status = isHidden ? (reminder.repeat ? 'скрыто до следующего раза' : 'скрыто') : due ? 'сегодня' : 'ждёт'
           return (
             <li className={`reminder-list__item${isHidden ? ' reminder-list__item--hidden' : ''}`} key={reminder.id}>
-              <time className="reminder-list__date" dateTime={reminder.date}>
-                {fmtDateYear(parseISO(reminder.date))}
-              </time>
+              <span className="reminder-list__date">{scheduleLabel(reminder)}</span>
               <p className="reminder-list__title">
                 {reminder.title}
-                <span className={`badge${isDue && !isHidden ? ' badge--due' : ' badge--optional'}`}>{status}</span>
+                <span className={`badge${due && !isHidden ? ' badge--due' : ' badge--optional'}`}>{status}</span>
               </p>
               <p className="reminder-list__actions">
-                {(isDue || isHidden) && (
-                  <button type="button" className="reminder-list__control" onClick={() => onToggleDismiss(reminder.id)}>
+                {(due || isHidden) && (
+                  <button type="button" className="reminder-list__control" onClick={() => onToggleDismiss(key)}>
                     {isHidden ? 'показать снова' : 'скрыть'}
                   </button>
                 )}
