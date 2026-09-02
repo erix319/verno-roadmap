@@ -14,3 +14,35 @@
   gap: var(--spacing-xs);
   margin-block-end: var(--spacing-md);
 }
+
+/* Сворачиваемая секция: заголовок — summary, содержимое скрыто по умолчанию */
+.section-fold__summary {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  width: fit-content;
+  cursor: pointer;
+  user-select: none;
+}
+
+.section-fold__summary::marker {
+  color: var(--color-text-muted);
+}
+
+.section-fold__hint {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.section-fold__hint::after {
+  content: 'развернуть';
+}
+
+.section-fold[open] .section-fold__hint::after {
+  content: 'свернуть';
+}
+
+.section-fold__lead {
+  margin-block: var(--spacing-sm) var(--spacing-md);
+}

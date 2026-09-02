@@ -25,6 +25,7 @@ export function BackupSection({ onExport, onImport }: BackupSectionProps) {
       setMessage('Сначала вставь строку резервной копии в поле.')
       return
     }
+    if (!window.confirm('Импортировать копию? Текущие галочки, отложенные шаги, настройки и напоминалки будут заменены.')) return
     setMessage(
       onImport(value.trim())
         ? 'Готово: галочки, отложенные шаги, настройки и напоминалки применены.'
@@ -34,14 +35,16 @@ export function BackupSection({ onExport, onImport }: BackupSectionProps) {
 
   return (
     <section className="page-section" aria-labelledby="backup-title">
-      <div className="page-section__header">
-        <h2 id="backup-title">Перенос между устройствами</h2>
-        <p className="section-lead">
+      <details className="section-fold">
+        <summary className="section-fold__summary">
+          <h2 id="backup-title">Перенос между устройствами</h2>
+          <span className="section-fold__hint" aria-hidden="true" />
+        </summary>
+        <p className="section-lead section-fold__lead">
           Прогресс хранится в localStorage конкретного браузера. Экспорт собирает всё (галочки, отложенные, настройки, напоминалки) в одну строку — импорт на другом
           устройстве применяет её.
         </p>
-      </div>
-      <textarea
+        <textarea
         className="backup__area"
         rows={3}
         value={value}
@@ -49,19 +52,20 @@ export function BackupSection({ onExport, onImport }: BackupSectionProps) {
         placeholder="Сюда ляжет строка экспорта — или вставь копию с другого устройства"
         aria-label="Строка резервной копии"
       />
-      <div className="backup__actions">
-        <button type="button" className="button" onClick={doExport}>
-          Экспортировать
-        </button>
-        <button type="button" className="button" onClick={doImport}>
-          Импортировать
-        </button>
-      </div>
-      {message && (
-        <p className="backup__message" role="status">
-          {message}
-        </p>
-      )}
+        <div className="backup__actions">
+          <button type="button" className="button" onClick={doExport}>
+            Экспортировать
+          </button>
+          <button type="button" className="button" onClick={doImport}>
+            Импортировать
+          </button>
+        </div>
+        {message && (
+          <p className="backup__message" role="status">
+            {message}
+          </p>
+        )}
+      </details>
     </section>
   )
 }

@@ -100,9 +100,13 @@
 }
 
 .step__details-summary {
+  display: flex;
+  align-items: center;
+  min-height: 2rem;
   width: fit-content;
+  padding-inline-end: 0.375rem;
   font-family: var(--font-family-mono);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   color: var(--color-text-muted);
   cursor: pointer;
   user-select: none;
