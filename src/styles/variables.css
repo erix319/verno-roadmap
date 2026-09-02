@@ -47,3 +47,21 @@
   --container-width: 70rem;
   --transition-fast: 150ms ease;
 }
+
+/* Светлая тема — по переключателю в шапке, те же оттенки на светлых нейтралах */
+:root[data-theme='light'] {
+  --color-background: #f7fafc;
+  --color-surface: #ffffff;
+  --color-text: #171923;
+  --color-text-muted: #4a5568;
+  --color-border: #d1dbf9;
+  --color-track-a: #a324cc;
+  --color-track-a-text: #7d1a99;
+  --color-track-a-surface: #f4e3ff;
+  --color-track-b: #177999;
+  --color-track-b-text: #135e80;
+  --color-track-b-surface: #e6f9ff;
+  --color-success: #0f9c5b;
+  --color-focus: #177999;
+  --color-on-accent: #ffffff;
+}

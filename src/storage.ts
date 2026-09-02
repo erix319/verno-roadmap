@@ -5,6 +5,26 @@ const SETTINGS_KEY = 'verno-roadmap:settings'
 const SKIPPED_KEY = 'verno-roadmap:skipped'
 const REMINDERS_DISMISSED_KEY = 'verno-roadmap:reminders-dismissed'
 const REMINDERS_CUSTOM_KEY = 'verno-roadmap:reminders-custom'
+const THEME_KEY = 'verno-roadmap:theme'
+
+export type Theme = 'dark' | 'light'
+
+/** Тот же ключ читает инлайн-скрипт в index.html до первой отрисовки */
+export function loadTheme(): Theme {
+  try {
+    return localStorage.getItem(THEME_KEY) === 'light' ? 'light' : 'dark'
+  } catch {
+    return 'dark'
+  }
+}
+
+export function saveTheme(theme: Theme): void {
+  try {
+    localStorage.setItem(THEME_KEY, theme)
+  } catch {
+    /* см. ниже */
+  }
+}
 
 export interface CustomReminder {
   id: string

@@ -66,12 +66,14 @@
   margin-inline-start: auto;
 }
 
-.app-nav__bell {
+.app-nav__bell,
+.app-nav__theme {
   background: none;
   cursor: pointer;
 }
 
-.app-nav__bell:hover {
+.app-nav__bell:hover,
+.app-nav__theme:hover {
   border-color: var(--color-border);
 }
 

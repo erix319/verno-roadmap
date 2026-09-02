@@ -1,5 +1,6 @@
 import type { TrackId } from '../data'
 import type { Plan } from '../schedule'
+import type { Theme } from '../storage'
 import { ROUTE_META, type Route } from '../router'
 
 interface AppNavProps {
@@ -8,9 +9,11 @@ interface AppNavProps {
   /** Сколько напоминаний наступило и не скрыто */
   dueReminders: number
   onBellClick: () => void
+  theme: Theme
+  onToggleTheme: () => void
 }
 
-export function AppNav({ route, plan, dueReminders, onBellClick }: AppNavProps) {
+export function AppNav({ route, plan, dueReminders, onBellClick, theme, onToggleTheme }: AppNavProps) {
   const percentOf = (trackId: TrackId) => {
     const track = plan.tracks[trackId]
     return track.total ? Math.round((track.done / track.total) * 100) : 0
@@ -43,6 +46,17 @@ export function AppNav({ route, plan, dueReminders, onBellClick }: AppNavProps) 
           >
             <span aria-hidden="true">🔔</span>
             {dueReminders > 0 && <span className="app-nav__bell-count">{dueReminders}</span>}
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            className="app-nav__link app-nav__theme"
+            onClick={onToggleTheme}
+            aria-label={theme === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему'}
+            title={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
+          >
+            <span aria-hidden="true">{theme === 'dark' ? '☀️' : '🌙'}</span>
           </button>
         </li>
       </ul>

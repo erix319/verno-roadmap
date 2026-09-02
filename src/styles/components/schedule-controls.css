@@ -125,7 +125,6 @@
   border-radius: var(--radius-md);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-md);
-  color-scheme: dark;
 }
 
 .schedule-controls__toggle {

@@ -11,9 +11,12 @@ import {
   saveDismissedReminders,
   saveDone,
   saveSettings,
+  loadTheme,
   saveSkipped,
+  saveTheme,
   sanitizeSettings,
   type CustomReminder,
+  type Theme,
 } from './storage'
 import { AppNav } from './components/AppNav'
 import { Hero } from './components/Hero'
@@ -35,6 +38,7 @@ export default function App() {
   const [dismissedReminders, setDismissedReminders] = useState<Record<string, boolean>>(loadDismissedReminders)
   const [customReminders, setCustomReminders] = useState<CustomReminder[]>(loadCustomReminders)
   const [pendingReminderScroll, setPendingReminderScroll] = useState(false)
+  const [theme, setTheme] = useState<Theme>(loadTheme)
   const route = useRoute()
   const pageRef = useRef<HTMLDivElement>(null)
   const isFirstRender = useRef(true)
@@ -44,6 +48,13 @@ export default function App() {
   useEffect(() => saveSettings(settings), [settings])
   useEffect(() => saveDismissedReminders(dismissedReminders), [dismissedReminders])
   useEffect(() => saveCustomReminders(customReminders), [customReminders])
+
+  useEffect(() => {
+    if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light')
+    else document.documentElement.removeAttribute('data-theme')
+    saveTheme(theme)
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f7fafc' : '#081028')
+  }, [theme])
 
   useEffect(() => {
     document.title = ROUTE_META[route].title
@@ -141,7 +152,14 @@ export default function App() {
 
   return (
     <div className="container">
-      <AppNav route={route} plan={plan} dueReminders={countDueReminders(reminders, dismissedReminders)} onBellClick={openReminders} />
+      <AppNav
+        route={route}
+        plan={plan}
+        dueReminders={countDueReminders(reminders, dismissedReminders)}
+        onBellClick={openReminders}
+        theme={theme}
+        onToggleTheme={() => setTheme((previous) => (previous === 'dark' ? 'light' : 'dark'))}
+      />
       <ReminderBanner reminders={reminders} dismissed={dismissedReminders} onDismiss={toggleReminderDismiss} />
       <div className="page" ref={pageRef} tabIndex={-1}>
         {route === 'home' ? (
