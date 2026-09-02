@@ -18,12 +18,12 @@
 
 .button--active,
 .button--primary {
-  background: var(--color-text);
-  border-color: var(--color-text);
-  color: var(--color-background);
+  background: var(--gradient-primary);
+  border-color: transparent;
+  color: var(--color-on-accent);
 }
 
 .button--primary:hover {
-  border-color: var(--color-text-muted);
-  background: var(--color-text-muted);
+  border-color: transparent;
+  filter: brightness(1.12);
 }

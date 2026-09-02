@@ -48,10 +48,10 @@ p {
   outline-offset: 2px;
 }
 
-/* Скроллбары в цветах темы: WebKit — детально, остальные — scrollbar-color */
+/* Скроллбары в цветах темы: тонкие, как в DashDark X */
 ::-webkit-scrollbar {
-  width: 0.75rem;
-  height: 0.75rem;
+  width: 0.375rem;
+  height: 0.375rem;
 }
 
 ::-webkit-scrollbar-track {
@@ -60,7 +60,6 @@ p {
 
 ::-webkit-scrollbar-thumb {
   background: var(--color-border);
-  border: 3px solid var(--color-background);
   border-radius: 999px;
 }
 
