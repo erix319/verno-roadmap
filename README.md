@@ -23,6 +23,20 @@ npm run dev
 
 Базовый путь подставляется автоматически из имени репозитория (`--base=/<repo>/`), поэтому переименование репозитория ничего не ломает.
 
+## Напоминания в Telegram
+
+Workflow `.github/workflows/reminders.yml` раз в день (06:00 UTC) читает `src/reminders.json` и шлёт наступившие напоминания в Telegram. Без настроенных секретов он просто молча выходит.
+
+Как включить:
+
+1. В Telegram напиши [@BotFather](https://t.me/BotFather) → `/newbot` → получи токен бота.
+2. Напиши своему новому боту любое сообщение (иначе он не сможет писать первым), затем открой `https://api.telegram.org/bot<токен>/getUpdates` и возьми `chat.id` из ответа.
+3. В репозитории: **Settings → Secrets and variables → Actions → New repository secret** — добавь `TELEGRAM_BOT_TOKEN` (токен) и `TELEGRAM_CHAT_ID` (chat id).
+
+Проверка: **Actions → Telegram reminders → Run workflow** — в лог упадёт «отправлено: N» (для теста поставь в `src/reminders.json` напоминание с сегодняшней датой).
+
+Нюансы: напоминания, добавленные формой на сайте, живут в localStorage браузера и в Telegram не попадают — общие держи в `src/reminders.json`; GitHub отключает cron-workflow после ~60 дней без коммитов в репозитории (придёт письмо с кнопкой включить обратно).
+
 ## Структура
 
 ```text

@@ -1,0 +1,41 @@
+name: Telegram reminders
+
+on:
+  schedule:
+    # каждый день в 06:00 UTC (09:00 МСК / 10:00 Еревана)
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Send due reminders to Telegram
+        env:
+          TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+        run: |
+          if [ -z "$TOKEN" ] || [ -z "$CHAT_ID" ]; then
+            echo "Секреты TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID не заданы — рассылка выключена, выходим без ошибки."
+            echo "Как включить: README, раздел «Напоминания в Telegram»."
+            exit 0
+          fi
+          TODAY=$(date -u +%F)
+          COUNT=0
+          while IFS= read -r row; do
+            TITLE=$(echo "$row" | jq -r '.title')
+            TEXT=$(echo "$row" | jq -r '.text // ""')
+            MSG="🔔 ${TITLE}"
+            [ -n "$TEXT" ] && MSG="${MSG}"$'\n\n'"${TEXT}"
+            MSG="${MSG}"$'\n\n'"${SITE_URL}"
+            curl -fsS -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+              --data-urlencode "chat_id=${CHAT_ID}" \
+              --data-urlencode "text=${MSG}" > /dev/null
+            COUNT=$((COUNT + 1))
+          done < <(jq -c --arg today "$TODAY" '.[] | select(.date == $today)' src/reminders.json)
+          echo "Дата ${TODAY}, отправлено напоминаний: ${COUNT}"

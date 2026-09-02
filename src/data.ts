@@ -511,6 +511,8 @@ export const HABITS: Habit[] = [
   { track: 'B', time: 'всегда', text: 'Читать документацию в первоисточнике, а не пересказы' },
 ]
 
+import remindersJson from './reminders.json'
+
 export interface Reminder {
   id: string
   /** ISO-дата, с которой напоминание считается наступившим */
@@ -520,22 +522,8 @@ export interface Reminder {
   link?: { hash: string; label: string }
 }
 
-export const REMINDERS: Reminder[] = [
-  {
-    id: 'r-igaming',
-    date: '2026-12-01',
-    title: 'Развилка пет-проекта: iGaming или парсер?',
-    text: 'Пора решать вариант пет-проекта: карточная игра «21» (React + PixiJS/GSAP + Socket.IO) или парсер-как-продукт. Посмотри вакансии iGaming-студий в стране переезда. Если ниша манит — включи шаги «по желанию», оставь PixiJS + GSAP (30 ч, финиш сдвинется примерно на неделю), остальное отложи.',
-    link: { hash: '#/track-b', label: 'Открыть трек B' },
-  },
-  {
-    id: 'r-uni',
-    date: '2027-02-02',
-    title: 'Через неделю — возвращение в вуз',
-    text: 'С 9 февраля модель считает темп по «ч/нед после вуза». Сверь план с реальностью и поправь часы в настройках.',
-    link: { hash: '#/', label: 'Открыть настройки' },
-  },
-]
+/** Общие напоминания живут в reminders.json — его же читает workflow телеграм-бота */
+export const REMINDERS: Reminder[] = remindersJson
 
 export const SKIPPED = [
   { title: 'WordPress Development 2026', meta: 'Madani · 14,5 ч', why: 'дубль Сокирки и Schiff; headless-часть — при заказе' },
