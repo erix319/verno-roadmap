@@ -6,6 +6,7 @@
 @import './components/app-nav.css';
 @import './components/hero.css';
 @import './components/recommendation.css';
+@import './components/reminders.css';
 @import './components/track-card.css';
 @import './components/track-page.css';
 @import './components/stat-card.css';

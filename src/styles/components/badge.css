@@ -32,3 +32,9 @@
 .badge--recommended {
   color: var(--color-track-a-text);
 }
+
+.badge--due {
+  color: var(--color-track-a-text);
+  background: var(--color-track-a-surface);
+  border-color: var(--color-track-a);
+}

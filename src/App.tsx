@@ -1,7 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { TRACKS } from './data'
 import { buildPlan, type DoneMap, type Settings, type SkippedMap } from './schedule'
-import { loadDone, loadSettings, loadSkipped, saveDone, saveSettings, saveSkipped } from './storage'
+import {
+  loadCustomReminders,
+  loadDismissedReminders,
+  loadDone,
+  loadSettings,
+  loadSkipped,
+  saveCustomReminders,
+  saveDismissedReminders,
+  saveDone,
+  saveSettings,
+  saveSkipped,
+  type CustomReminder,
+} from './storage'
 import { AppNav } from './components/AppNav'
 import { Hero } from './components/Hero'
 import { Recommendation } from './components/Recommendation'
@@ -10,12 +22,15 @@ import { Timeline } from './components/Timeline'
 import { TrackCard } from './components/TrackCard'
 import { TrackPage } from './components/TrackPage'
 import { SkippedSection } from './components/SkippedSection'
+import { buildReminderViews, ReminderBanner, RemindersSection } from './components/Reminders'
 import { ROUTE_META, useRoute } from './router'
 
 export default function App() {
   const [done, setDone] = useState<DoneMap>(loadDone)
   const [skipped, setSkipped] = useState<SkippedMap>(loadSkipped)
   const [settings, setSettings] = useState<Settings>(loadSettings)
+  const [dismissedReminders, setDismissedReminders] = useState<Record<string, boolean>>(loadDismissedReminders)
+  const [customReminders, setCustomReminders] = useState<CustomReminder[]>(loadCustomReminders)
   const route = useRoute()
   const pageRef = useRef<HTMLDivElement>(null)
   const isFirstRender = useRef(true)
@@ -23,6 +38,8 @@ export default function App() {
   useEffect(() => saveDone(done), [done])
   useEffect(() => saveSkipped(skipped), [skipped])
   useEffect(() => saveSettings(settings), [settings])
+  useEffect(() => saveDismissedReminders(dismissedReminders), [dismissedReminders])
+  useEffect(() => saveCustomReminders(customReminders), [customReminders])
 
   useEffect(() => {
     document.title = ROUTE_META[route].title
@@ -56,9 +73,33 @@ export default function App() {
     if (window.confirm('Снять все галочки? Настройки и отложенные шаги останутся.')) setDone({})
   }
 
+  const reminders = useMemo(() => buildReminderViews(customReminders), [customReminders])
+
+  const toggleReminderDismiss = (id: string) =>
+    setDismissedReminders((previous) => {
+      const next = { ...previous }
+      if (next[id]) delete next[id]
+      else next[id] = true
+      return next
+    })
+
+  const addReminder = (date: string, text: string) =>
+    setCustomReminders((previous) => [...previous, { id: `custom-${Date.now().toString(36)}`, date, text }])
+
+  const deleteReminder = (id: string) => {
+    setCustomReminders((previous) => previous.filter((reminder) => reminder.id !== id))
+    setDismissedReminders((previous) => {
+      if (!previous[id]) return previous
+      const next = { ...previous }
+      delete next[id]
+      return next
+    })
+  }
+
   return (
     <div className="container">
       <AppNav route={route} plan={plan} />
+      <ReminderBanner reminders={reminders} dismissed={dismissedReminders} onDismiss={toggleReminderDismiss} />
       <div className="page" ref={pageRef} tabIndex={-1}>
         {route === 'home' ? (
           <>
@@ -78,6 +119,13 @@ export default function App() {
               </section>
               <ScheduleControls settings={settings} onChange={setSettings} onResetProgress={resetProgress} />
               <Timeline plan={plan} />
+              <RemindersSection
+                reminders={reminders}
+                dismissed={dismissedReminders}
+                onToggleDismiss={toggleReminderDismiss}
+                onAdd={addReminder}
+                onDelete={deleteReminder}
+              />
               <SkippedSection />
             </main>
           </>

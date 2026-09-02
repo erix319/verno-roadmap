@@ -3,6 +3,14 @@ import { DEFAULT_SETTINGS, type DoneMap, type Settings, type SkippedMap } from '
 const DONE_KEY = 'verno-roadmap:done'
 const SETTINGS_KEY = 'verno-roadmap:settings'
 const SKIPPED_KEY = 'verno-roadmap:skipped'
+const REMINDERS_DISMISSED_KEY = 'verno-roadmap:reminders-dismissed'
+const REMINDERS_CUSTOM_KEY = 'verno-roadmap:reminders-custom'
+
+export interface CustomReminder {
+  id: string
+  date: string
+  text: string
+}
 
 export function loadDone(): DoneMap {
   try {
@@ -37,6 +45,48 @@ export function loadSkipped(): SkippedMap {
 export function saveSkipped(skipped: SkippedMap): void {
   try {
     localStorage.setItem(SKIPPED_KEY, JSON.stringify(skipped))
+  } catch {
+    /* см. выше */
+  }
+}
+
+export function loadDismissedReminders(): Record<string, boolean> {
+  try {
+    const raw = localStorage.getItem(REMINDERS_DISMISSED_KEY)
+    if (!raw) return {}
+    const parsed = JSON.parse(raw)
+    return parsed && typeof parsed === 'object' ? (parsed as Record<string, boolean>) : {}
+  } catch {
+    return {}
+  }
+}
+
+export function saveDismissedReminders(dismissed: Record<string, boolean>): void {
+  try {
+    localStorage.setItem(REMINDERS_DISMISSED_KEY, JSON.stringify(dismissed))
+  } catch {
+    /* см. выше */
+  }
+}
+
+export function loadCustomReminders(): CustomReminder[] {
+  try {
+    const raw = localStorage.getItem(REMINDERS_CUSTOM_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return []
+    return parsed.filter(
+      (entry): entry is CustomReminder =>
+        entry && typeof entry.id === 'string' && typeof entry.date === 'string' && typeof entry.text === 'string',
+    )
+  } catch {
+    return []
+  }
+}
+
+export function saveCustomReminders(reminders: CustomReminder[]): void {
+  try {
+    localStorage.setItem(REMINDERS_CUSTOM_KEY, JSON.stringify(reminders))
   } catch {
     /* см. выше */
   }
