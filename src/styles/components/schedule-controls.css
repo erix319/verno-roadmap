@@ -40,10 +40,53 @@
   font-weight: 500;
 }
 
+/* Дорожка ползунка окрашена в цвета треков: слева доля A, справа — B */
 .schedule-controls__range {
+  appearance: none;
+  -webkit-appearance: none;
   width: 100%;
+  height: 1.5rem;
   margin: 0;
-  accent-color: var(--color-track-a);
+  background: transparent;
+  cursor: pointer;
+}
+
+.schedule-controls__range::-webkit-slider-runnable-track {
+  height: 0.5rem;
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    to right,
+    var(--color-track-a) 0 var(--share-a, 70%),
+    var(--color-track-b) var(--share-a, 70%) 100%
+  );
+}
+
+.schedule-controls__range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-block-start: -0.3125rem;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 2px solid var(--color-text);
+}
+
+.schedule-controls__range::-moz-range-track {
+  height: 0.5rem;
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    to right,
+    var(--color-track-a) 0 var(--share-a, 70%),
+    var(--color-track-b) var(--share-a, 70%) 100%
+  );
+}
+
+.schedule-controls__range::-moz-range-thumb {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 2px solid var(--color-text);
 }
 
 .schedule-controls__presets {

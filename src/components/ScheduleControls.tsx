@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { DEFAULT_SETTINGS, type Settings } from '../schedule'
 
 interface ScheduleControlsProps {
@@ -41,6 +42,7 @@ export function ScheduleControls({ settings, onChange, onResetProgress }: Schedu
           max={100}
           step={5}
           value={settings.shareA}
+          style={{ '--share-a': `${settings.shareA}%` } as CSSProperties}
           onChange={(event) => update({ shareA: Number(event.target.value) })}
         />
         <ul className="schedule-controls__presets">
