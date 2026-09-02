@@ -17,7 +17,10 @@
   --color-success: #14ca74;
   --color-focus: #00c2ff;
   --color-on-accent: #ffffff;
+  --color-border-input: #4a5568;
   --gradient-primary: linear-gradient(128.49deg, #cb3cff 19.86%, #7f25fb 68.34%);
+  /* Для кнопок с белым текстом: сдвинут к фиолетовому, чтобы контраст ≥ 4.5 по всей длине */
+  --gradient-primary-strong: linear-gradient(128.49deg, #a531fd 19.86%, #7f25fb 68.34%);
 
   --font-family-display: 'Mona Sans', 'Work Sans', system-ui, sans-serif;
   --font-family-primary: 'Mona Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -64,4 +67,5 @@
   --color-success: #0f9c5b;
   --color-focus: #177999;
   --color-on-accent: #ffffff;
+  --color-border-input: #7e89ac;
 }

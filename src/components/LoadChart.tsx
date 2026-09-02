@@ -20,6 +20,7 @@ export function LoadChart({ plan, settings, only }: LoadChartProps) {
     weeks = weeks.slice(0, lastIndex + 1)
   }
   const [grown, setGrown] = useState(false)
+  const [selected, setSelected] = useState<number | null>(null)
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => setGrown(true))
@@ -54,11 +55,16 @@ export function LoadChart({ plan, settings, only }: LoadChartProps) {
             const title = only
               ? `неделя с ${fmtDate(week.start)} · ${Math.round(week.hours[only])} ч`
               : `неделя с ${fmtDate(week.start)} · A ${hoursA} ч · B ${hoursB} ч`
+            const isSelected = selected === index
             return (
-              <div
+              <button
                 key={week.start.getTime()}
-                className={`load-chart__week${index === uniIndex ? ' load-chart__week--uni' : ''}`}
+                type="button"
+                className={`load-chart__week${index === uniIndex ? ' load-chart__week--uni' : ''}${isSelected ? ' load-chart__week--selected' : ''}`}
                 title={title}
+                aria-label={title}
+                aria-pressed={isSelected}
+                onClick={() => setSelected(isSelected ? null : index)}
               >
                 {only !== 'A' && (
                   <span
@@ -72,7 +78,7 @@ export function LoadChart({ plan, settings, only }: LoadChartProps) {
                     style={{ height: grown ? `${(week.hours.A / max) * 100}%` : '0%', transitionDelay: delay }}
                   />
                 )}
-              </div>
+              </button>
             )
           })}
         </div>
@@ -87,6 +93,13 @@ export function LoadChart({ plan, settings, only }: LoadChartProps) {
             )
           })}
         </div>
+        <p className="load-chart__detail" role="status">
+          {selected !== null && weeks[selected]
+            ? only
+              ? `неделя с ${fmtDate(weeks[selected].start)} · ${Math.round(weeks[selected].hours[only])} ч`
+              : `неделя с ${fmtDate(weeks[selected].start)} · A ${Math.round(weeks[selected].hours.A)} ч · B ${Math.round(weeks[selected].hours.B)} ч`
+            : 'Тапни или кликни столбик — здесь появятся точные часы недели.'}
+        </p>
         <p className="load-chart__legend">
           {only !== 'B' && <span className="load-chart__key load-chart__key--a">трек A</span>}
           {only !== 'A' && <span className="load-chart__key load-chart__key--b">трек B</span>}

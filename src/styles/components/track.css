@@ -34,10 +34,19 @@
   height: 3.25rem;
 }
 
+/* В сжатом кольце процент нечитаем — на узких экранах он есть в соседней строке */
+.track__header .progress-ring__text {
+  display: none;
+}
+
 @media (min-width: 30rem) {
   .track__header .progress-ring {
     width: 4.5rem;
     height: 4.5rem;
+  }
+
+  .track__header .progress-ring__text {
+    display: inline;
   }
 }
 

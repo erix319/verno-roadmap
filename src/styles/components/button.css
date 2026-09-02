@@ -18,7 +18,7 @@
 
 .button--active,
 .button--primary {
-  background: var(--gradient-primary);
+  background: var(--gradient-primary-strong);
   border-color: transparent;
   color: var(--color-on-accent);
 }

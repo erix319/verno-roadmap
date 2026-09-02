@@ -42,7 +42,7 @@ export function BackupSection({ onExport, onImport }: BackupSectionProps) {
         </summary>
         <p className="section-lead section-fold__lead">
           Прогресс хранится в localStorage конкретного браузера. Экспорт собирает всё (галочки, отложенные, настройки, напоминалки) в одну строку — импорт на другом
-          устройстве применяет её.
+          устройстве применяет её. Тема — настройка устройства и не переносится.
         </p>
         <textarea
         className="backup__area"
