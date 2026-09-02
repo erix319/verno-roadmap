@@ -48,6 +48,36 @@ p {
   outline-offset: 2px;
 }
 
+/* Скроллбары в цветах темы: WebKit — детально, остальные — scrollbar-color */
+::-webkit-scrollbar {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border: 3px solid var(--color-background);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--color-background);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-color: var(--color-border) var(--color-background);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
