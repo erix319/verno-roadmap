@@ -1,21 +1,21 @@
 /* Палитра DashDark X (themewagon.github.io/dashdarkX): чернильно-синие фоны,
    пурпурный primary с фирменным градиентом, циановый secondary.
    Трек A = primary (пурпур), трек B = secondary (циан).
-   Светлая тема — те же оттенки на светлых нейтралах (у оригинала её нет). */
+   Тема всегда тёмная — как у оригинала. */
 :root {
-  --color-background: #f7fafc;
-  --color-surface: #ffffff;
-  --color-text: #171923;
-  --color-text-muted: #4a5568;
-  --color-border: #d1dbf9;
-  --color-track-a: #a324cc;
-  --color-track-a-text: #7d1a99;
-  --color-track-a-surface: #f4e3ff;
-  --color-track-b: #177999;
-  --color-track-b-text: #135e80;
-  --color-track-b-surface: #e6f9ff;
-  --color-success: #0f9c5b;
-  --color-focus: #177999;
+  --color-background: #081028;
+  --color-surface: #0b1739;
+  --color-text: #ffffff;
+  --color-text-muted: #aeb9e1;
+  --color-border: #343b4f;
+  --color-track-a: #cb3cff;
+  --color-track-a-text: #e0b5ff;
+  --color-track-a-surface: #3b004d;
+  --color-track-b: #00c2ff;
+  --color-track-b-text: #b3ecff;
+  --color-track-b-surface: #004466;
+  --color-success: #14ca74;
+  --color-focus: #00c2ff;
   --color-on-accent: #ffffff;
   --gradient-primary: linear-gradient(128.49deg, #cb3cff 19.86%, #7f25fb 68.34%);
 
@@ -46,23 +46,4 @@
   --border-width: 1px;
   --container-width: 70rem;
   --transition-fast: 150ms ease;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: #081028;
-    --color-surface: #0b1739;
-    --color-text: #ffffff;
-    --color-text-muted: #aeb9e1;
-    --color-border: #343b4f;
-    --color-track-a: #cb3cff;
-    --color-track-a-text: #e0b5ff;
-    --color-track-a-surface: #3b004d;
-    --color-track-b: #00c2ff;
-    --color-track-b-text: #b3ecff;
-    --color-track-b-surface: #004466;
-    --color-success: #14ca74;
-    --color-focus: #00c2ff;
-    --color-on-accent: #ffffff;
-  }
 }
