@@ -29,6 +29,18 @@
   min-width: 0;
 }
 
+.track__header .progress-ring {
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+@media (min-width: 30rem) {
+  .track__header .progress-ring {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+}
+
 .track--b .track__header {
   border-block-start-color: var(--color-track-b);
 }

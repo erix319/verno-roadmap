@@ -2,11 +2,27 @@
   display: grid;
   gap: var(--spacing-md);
   margin-block-start: var(--spacing-lg);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
   background: var(--color-surface);
   border: var(--border-width) solid var(--color-border);
   border-inline-start: 4px solid var(--color-track-a);
   border-radius: var(--radius-lg);
+}
+
+.recommendation__actions .button--primary {
+  flex: 1 1 auto;
+  justify-content: center;
+}
+
+@media (min-width: 48rem) {
+  .recommendation {
+    padding: var(--spacing-lg);
+  }
+
+  .recommendation__actions .button--primary {
+    flex: 0 0 auto;
+    justify-content: flex-start;
+  }
 }
 
 .recommendation__why {

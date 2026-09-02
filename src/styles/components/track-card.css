@@ -90,11 +90,17 @@
 }
 
 .track-card__cta {
-  justify-self: start;
+  justify-self: stretch;
+  justify-content: center;
 }
 
 @media (min-width: 48rem) {
   .track-cards {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .track-card__cta {
+    justify-self: start;
+    justify-content: flex-start;
   }
 }

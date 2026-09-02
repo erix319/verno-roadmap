@@ -16,10 +16,10 @@ export function AppNav({ route, plan, dueReminders, onBellClick }: AppNavProps) 
     return track.total ? Math.round((track.done / track.total) * 100) : 0
   }
 
-  const links: { route: Route; label: string; percent?: number }[] = [
+  const links: { route: Route; label: string; suffix?: string; percent?: number }[] = [
     { route: 'home', label: 'Обзор' },
-    { route: 'A', label: 'Трек A · фриланс', percent: percentOf('A') },
-    { route: 'B', label: 'Трек B · fullstack', percent: percentOf('B') },
+    { route: 'A', label: 'Трек A', suffix: '· фриланс', percent: percentOf('A') },
+    { route: 'B', label: 'Трек B', suffix: '· fullstack', percent: percentOf('B') },
   ]
 
   return (
@@ -29,6 +29,7 @@ export function AppNav({ route, plan, dueReminders, onBellClick }: AppNavProps) 
           <li key={link.route}>
             <a className="app-nav__link" aria-current={route === link.route ? 'page' : undefined} href={ROUTE_META[link.route].hash}>
               {link.label}
+              {link.suffix && <span className="app-nav__suffix">{link.suffix}</span>}
               {link.percent !== undefined && <span className="app-nav__percent">{link.percent} %</span>}
             </a>
           </li>
