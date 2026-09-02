@@ -21,4 +21,5 @@
 @import './components/milestone.css';
 @import './components/habit-list.css';
 @import './components/skipped-list.css';
+@import './utilities/link-button.css';
 @import './utilities/visually-hidden.css';

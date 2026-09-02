@@ -139,7 +139,7 @@ function StepItem({ step, checked, scheduled, isSkipped, onToggle, onSkip }: Ste
         </p>
         <p className="step__hours">
           <span className="step__hours-value">{fmtHours(item.hours)} ч</span>
-          <button type="button" className="step__defer" onClick={() => onSkip(item.id)}>
+          <button type="button" className="link-button step__defer" onClick={() => onSkip(item.id)}>
             вернуть в план
           </button>
         </p>
@@ -183,7 +183,7 @@ function StepItem({ step, checked, scheduled, isSkipped, onToggle, onSkip }: Ste
           </>
         )}
         {!locked && !checked && !parked && (
-          <button type="button" className="step__defer" onClick={() => onSkip(item.id)}>
+          <button type="button" className="link-button step__defer" onClick={() => onSkip(item.id)}>
             отложить
           </button>
         )}

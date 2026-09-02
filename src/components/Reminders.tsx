@@ -77,7 +77,7 @@ export function ReminderBanner({ reminders, dismissed, onDismiss }: ReminderBann
           {reminder.text && <p className="reminder-banner__text">{reminder.text}</p>}
           <p className="reminder-banner__actions">
             {reminder.link && <a href={reminder.link.hash}>{reminder.link.label}</a>}
-            <button type="button" className="reminder-banner__dismiss" onClick={() => onDismiss(dismissKey(reminder, today))}>
+            <button type="button" className="link-button" onClick={() => onDismiss(dismissKey(reminder, today))}>
               {reminder.repeat ? 'скрыть до следующего раза' : 'скрыть'}
             </button>
           </p>
@@ -134,12 +134,12 @@ export function RemindersSection({ reminders, dismissed, onToggleDismiss, onAdd,
               </p>
               <p className="reminder-list__actions">
                 {(due || isHidden) && (
-                  <button type="button" className="reminder-list__control" onClick={() => onToggleDismiss(key)}>
+                  <button type="button" className="link-button" onClick={() => onToggleDismiss(key)}>
                     {isHidden ? 'показать снова' : 'скрыть'}
                   </button>
                 )}
                 {reminder.custom && (
-                  <button type="button" className="reminder-list__control" onClick={() => onDelete(reminder.id)}>
+                  <button type="button" className="link-button" onClick={() => onDelete(reminder.id)}>
                     удалить
                   </button>
                 )}

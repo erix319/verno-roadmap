@@ -1,0 +1,19 @@
+/* Мелкое текстовое действие («отложить», «скрыть») с полноценной зоной нажатия */
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.25rem 0.375rem;
+  background: none;
+  border: 0;
+  font-family: var(--font-family-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  color: var(--color-text);
+}

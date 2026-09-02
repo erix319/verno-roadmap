@@ -75,10 +75,6 @@
   font-weight: 500;
 }
 
-.step--skipped {
-  opacity: 0.55;
-}
-
 .step__pause {
   margin-block-start: 0.125rem;
   font-size: 0.75rem;
@@ -94,21 +90,8 @@
 }
 
 .step__defer {
-  display: inline-block;
-  margin-block-start: 0.25rem;
-  padding: 0;
-  background: none;
-  border: 0;
-  font-family: var(--font-family-mono);
-  font-size: 0.72rem;
-  color: var(--color-text-muted);
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
-  cursor: pointer;
-}
-
-.step__defer:hover {
-  color: var(--color-text);
+  margin-block-start: 0.125rem;
+  margin-inline-end: -0.375rem;
 }
 
 .step__details {

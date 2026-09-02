@@ -31,22 +31,6 @@
   font-size: var(--font-size-sm);
 }
 
-.reminder-banner__dismiss {
-  padding: 0;
-  background: none;
-  border: 0;
-  font-family: var(--font-family-mono);
-  font-size: 0.72rem;
-  color: var(--color-text-muted);
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
-  cursor: pointer;
-}
-
-.reminder-banner__dismiss:hover {
-  color: var(--color-text);
-}
-
 .reminder-list {
   display: grid;
   gap: 0;
@@ -91,22 +75,6 @@
 
 .reminder-list__actions:empty {
   display: none;
-}
-
-.reminder-list__control {
-  padding: 0;
-  background: none;
-  border: 0;
-  font-family: var(--font-family-mono);
-  font-size: 0.72rem;
-  color: var(--color-text-muted);
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
-  cursor: pointer;
-}
-
-.reminder-list__control:hover {
-  color: var(--color-text);
 }
 
 .reminder-form {
