@@ -23,3 +23,12 @@
 .badge--optional {
   color: var(--color-text-muted);
 }
+
+.badge--skipped {
+  color: var(--color-text-muted);
+  border-style: dashed;
+}
+
+.badge--recommended {
+  color: var(--color-track-a-text);
+}

@@ -25,6 +25,11 @@
   border-block-start-color: var(--color-track-b);
 }
 
+.track__title {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  line-height: 1.2;
+}
+
 .track__goal {
   font-size: var(--font-size-md);
   color: var(--color-text-muted);

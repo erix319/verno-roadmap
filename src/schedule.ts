@@ -89,9 +89,12 @@ export function isDone(item: Item, done: DoneMap): boolean {
   return !!item.done || !!done[item.id]
 }
 
+/** Отложенные пользователем шаги: id → true */
+export type SkippedMap = Record<string, boolean>
+
 /** Шаг участвует в расписании и в суммах часов */
-export function isScheduled(item: Item, settings: Settings): boolean {
-  return item.kind !== 'milestone' && (!item.optional || settings.includeOptional)
+export function isScheduled(item: Item, settings: Settings, skipped: SkippedMap = {}): boolean {
+  return item.kind !== 'milestone' && (!item.optional || settings.includeOptional) && !skipped[item.id]
 }
 
 /**
@@ -99,7 +102,7 @@ export function isScheduled(item: Item, settings: Settings): boolean {
  * Каждая неделя делится между треками по shareA; когда один трек закончен,
  * вся неделя уходит второму. Вехи закрываются датой предыдущего шага.
  */
-export function buildPlan(settings: Settings, done: DoneMap): Plan {
+export function buildPlan(settings: Settings, done: DoneMap, skipped: SkippedMap = {}): Plan {
   const start = parseISO(settings.start)
   const uni = parseISO(UNI_DATE)
   const share = Math.min(100, Math.max(0, settings.shareA)) / 100
@@ -110,7 +113,7 @@ export function buildPlan(settings: Settings, done: DoneMap): Plan {
     queues[item.track].push({
       item,
       finish: null,
-      remaining: finished || !isScheduled(item, settings) ? 0 : item.hours,
+      remaining: finished || !isScheduled(item, settings, skipped) ? 0 : item.hours,
     })
   }
 
@@ -174,7 +177,7 @@ export function buildPlan(settings: Settings, done: DoneMap): Plan {
   let end = start
   for (const t of ['A', 'B'] as TrackId[]) {
     const items = queues[t]
-    const counted = (p: ItemPlan) => isScheduled(p.item, settings) || (p.item.optional && isDone(p.item, done))
+    const counted = (p: ItemPlan) => isScheduled(p.item, settings, skipped) || isDone(p.item, done)
     const total = items.reduce((s, p) => s + (counted(p) ? p.item.hours : 0), 0)
     const doneH = items.reduce((s, p) => s + (counted(p) && isDone(p.item, done) ? p.item.hours : 0), 0)
     const finishDates = items.filter((p) => p.finish).map((p) => p.finish as Date)

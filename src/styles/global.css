@@ -3,7 +3,11 @@
 @import './base/typography.css';
 @import './layout/container.css';
 @import './layout/site-footer.css';
+@import './components/app-nav.css';
 @import './components/hero.css';
+@import './components/recommendation.css';
+@import './components/track-card.css';
+@import './components/track-page.css';
 @import './components/stat-card.css';
 @import './components/progress-bar.css';
 @import './components/button.css';

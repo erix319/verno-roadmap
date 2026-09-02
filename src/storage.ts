@@ -1,7 +1,8 @@
-import { DEFAULT_SETTINGS, type DoneMap, type Settings } from './schedule'
+import { DEFAULT_SETTINGS, type DoneMap, type Settings, type SkippedMap } from './schedule'
 
 const DONE_KEY = 'verno-roadmap:done'
 const SETTINGS_KEY = 'verno-roadmap:settings'
+const SKIPPED_KEY = 'verno-roadmap:skipped'
 
 export function loadDone(): DoneMap {
   try {
@@ -19,6 +20,25 @@ export function saveDone(done: DoneMap): void {
     localStorage.setItem(DONE_KEY, JSON.stringify(done))
   } catch {
     /* приватный режим или заблокированное хранилище — просто не сохраняем */
+  }
+}
+
+export function loadSkipped(): SkippedMap {
+  try {
+    const raw = localStorage.getItem(SKIPPED_KEY)
+    if (!raw) return {}
+    const parsed = JSON.parse(raw)
+    return parsed && typeof parsed === 'object' ? (parsed as SkippedMap) : {}
+  } catch {
+    return {}
+  }
+}
+
+export function saveSkipped(skipped: SkippedMap): void {
+  try {
+    localStorage.setItem(SKIPPED_KEY, JSON.stringify(skipped))
+  } catch {
+    /* см. выше */
   }
 }
 

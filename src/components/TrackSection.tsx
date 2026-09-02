@@ -1,36 +1,60 @@
 import { HABITS, TRACKS, type Item } from '../data'
-import { fmtDate, fmtDateYear, fmtHours, isDone, isScheduled, toISO, type DoneMap, type ItemPlan, type Settings, type TrackPlan } from '../schedule'
+import {
+  fmtDate,
+  fmtDateYear,
+  fmtHours,
+  isDone,
+  isScheduled,
+  toISO,
+  type DoneMap,
+  type ItemPlan,
+  type Settings,
+  type SkippedMap,
+  type TrackPlan,
+} from '../schedule'
 
 interface TrackSectionProps {
   trackPlan: TrackPlan
   done: DoneMap
   settings: Settings
+  skipped: SkippedMap
   onToggle: (id: string) => void
+  onSkip: (id: string) => void
+  /** 1 — на странице трека (заголовок страницы), 2 — в общем списке */
+  headingLevel?: 1 | 2
 }
 
 function formatNumber(value: number): string {
   return String(value).replace('.', ',')
 }
 
-export function TrackSection({ trackPlan, done, settings, onToggle }: TrackSectionProps) {
+export function TrackSection({ trackPlan, done, settings, skipped, onToggle, onSkip, headingLevel = 2 }: TrackSectionProps) {
   const track = TRACKS.find((candidate) => candidate.id === trackPlan.track)
   if (!track) return null
 
+  const Heading: 'h1' | 'h2' = headingLevel === 1 ? 'h1' : 'h2'
   const modifier = track.id === 'A' ? 'track--a' : 'track--b'
   const percent = trackPlan.total ? Math.round((trackPlan.done / trackPlan.total) * 100) : 0
   const habits = HABITS.filter((habit) => habit.track === track.id)
   const titleId = `track-${track.id.toLowerCase()}-title`
+  const skippedSteps = trackPlan.items.filter((step) => step.item.kind !== 'milestone' && skipped[step.item.id] && !isDone(step.item, done))
+  const skippedHours = skippedSteps.reduce((sum, step) => sum + step.item.hours, 0)
 
   return (
     <section className={`track ${modifier}`} aria-labelledby={titleId}>
       <header className="track__header">
         <p className="eyebrow">Трек {track.id}</p>
-        <h2 id={titleId}>{track.name}</h2>
+        <Heading id={titleId} className="track__title">{track.name}</Heading>
         <p className="track__goal">{track.goal}</p>
         <p className="track__meta">
           <span>
             {fmtHours(trackPlan.done)} / {fmtHours(trackPlan.total)} ч · {percent} %
           </span>
+          {skippedSteps.length > 0 && (
+            <span>
+              отложено · {skippedSteps.length} ш. · {fmtHours(skippedHours)} ч
+            </span>
+          )}
           <span>финиш · {fmtDateYear(trackPlan.finish)}</span>
         </p>
         <span className="progress-bar" role="progressbar" aria-label={`Прогресс трека ${track.id}`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={percent}>
@@ -43,7 +67,15 @@ export function TrackSection({ trackPlan, done, settings, onToggle }: TrackSecti
           step.item.kind === 'milestone' ? (
             <MilestoneItem key={step.item.id} step={step} checked={isDone(step.item, done)} />
           ) : (
-            <StepItem key={step.item.id} step={step} checked={isDone(step.item, done)} scheduled={isScheduled(step.item, settings)} onToggle={onToggle} />
+            <StepItem
+              key={step.item.id}
+              step={step}
+              checked={isDone(step.item, done)}
+              scheduled={isScheduled(step.item, settings, skipped)}
+              isSkipped={!!skipped[step.item.id]}
+              onToggle={onToggle}
+              onSkip={onSkip}
+            />
           ),
         )}
       </ol>
@@ -87,12 +119,34 @@ interface StepItemProps {
   step: ItemPlan
   checked: boolean
   scheduled: boolean
+  isSkipped: boolean
   onToggle: (id: string) => void
+  onSkip: (id: string) => void
 }
 
-function StepItem({ step, checked, scheduled, onToggle }: StepItemProps) {
+function StepItem({ step, checked, scheduled, isSkipped, onToggle, onSkip }: StepItemProps) {
   const item: Item = step.item
   const locked = Boolean(item.done)
+
+  if (isSkipped && !checked) {
+    return (
+      <li className="step step--skipped">
+        <span className="step__pause" aria-hidden="true">⏸</span>
+        <p className="step__title step__title--plain">
+          {item.title}
+          {item.meta && <span className="step__meta"> · {item.meta}</span>}
+          <span className="badge badge--skipped">отложено</span>
+        </p>
+        <p className="step__hours">
+          <span className="step__hours-value">{fmtHours(item.hours)} ч</span>
+          <button type="button" className="step__defer" onClick={() => onSkip(item.id)}>
+            вернуть в план
+          </button>
+        </p>
+      </li>
+    )
+  }
+
   const parked = !scheduled && !checked
   const noteId = `${item.id}-note`
   const className = ['step', checked ? 'step--done' : '', parked ? 'step--parked' : ''].filter(Boolean).join(' ')
@@ -115,7 +169,10 @@ function StepItem({ step, checked, scheduled, onToggle }: StepItemProps) {
         {item.kind === 'practice' && <span className="badge badge--practice">практика</span>}
         {item.optional && <span className="badge badge--optional">по желанию</span>}
       </label>
-      <p className="step__note" id={noteId}>{item.note}</p>
+      <details className="step__details">
+        <summary className="step__details-summary">что именно проходить</summary>
+        <p className="step__note" id={noteId}>{item.note}</p>
+      </details>
       <p className="step__hours">
         <span className="step__hours-value">{locked ? 'готово' : checked ? 'отмечено' : `${fmtHours(item.hours)} ч`}</span>
         {!locked && !checked && (
@@ -124,6 +181,11 @@ function StepItem({ step, checked, scheduled, onToggle }: StepItemProps) {
             <br />
             {parked ? 'не в расписании' : step.finish ? `к ${fmtDate(step.finish)}` : ''}
           </>
+        )}
+        {!locked && !checked && !parked && (
+          <button type="button" className="step__defer" onClick={() => onSkip(item.id)}>
+            отложить
+          </button>
         )}
       </p>
     </li>

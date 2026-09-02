@@ -7,9 +7,9 @@ interface ScheduleControlsProps {
 }
 
 const PRESETS = [
-  { label: 'Сначала фриланс', share: 75, hint: '75 % недели треку A' },
+  { label: 'Сначала фриланс', share: 70, hint: '70 % недели треку A' },
   { label: 'Поровну', share: 50, hint: '50 на 50' },
-  { label: 'Сначала рост', share: 25, hint: '75 % недели треку B' },
+  { label: 'Сначала рост', share: 30, hint: '70 % недели треку B' },
 ]
 
 function toBoundedNumber(value: string, min: number, max: number, fallback: number): number {
