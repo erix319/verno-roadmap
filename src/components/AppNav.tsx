@@ -2,6 +2,7 @@ import type { TrackId } from '../data'
 import type { Plan } from '../schedule'
 import type { Theme } from '../storage'
 import { ROUTE_META, type Route } from '../router'
+import { BellIcon, MoonIcon, SunIcon } from './icons'
 
 interface AppNavProps {
   route: Route
@@ -44,7 +45,7 @@ export function AppNav({ route, plan, dueReminders, onBellClick, theme, onToggle
             onClick={onBellClick}
             aria-label={dueReminders > 0 ? `Напоминания: ${dueReminders} наступило` : 'Напоминания'}
           >
-            <span aria-hidden="true">🔔</span>
+            <BellIcon />
             {dueReminders > 0 && <span className="app-nav__bell-count">{dueReminders}</span>}
           </button>
         </li>
@@ -56,7 +57,7 @@ export function AppNav({ route, plan, dueReminders, onBellClick, theme, onToggle
             aria-label={theme === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему'}
             title={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
           >
-            <span aria-hidden="true">{theme === 'dark' ? '☀️' : '🌙'}</span>
+            {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
           </button>
         </li>
       </ul>

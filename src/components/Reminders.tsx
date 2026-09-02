@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { REMINDERS } from '../data'
 import { fmtDateYear, parseISO, todayISO } from '../schedule'
 import type { CustomReminder } from '../storage'
+import { BellIcon } from './icons'
 
 export interface ReminderView {
   id: string
@@ -71,7 +72,9 @@ export function ReminderBanner({ reminders, dismissed, onDismiss }: ReminderBann
       {due.map((reminder) => (
         <div className="reminder-banner__item" key={reminder.id}>
           <p className="reminder-banner__title">
-            <span aria-hidden="true">🔔 </span>
+            <span className="reminder-banner__icon" aria-hidden="true">
+              <BellIcon />
+            </span>
             {reminder.title}
           </p>
           {reminder.text && <p className="reminder-banner__text">{reminder.text}</p>}

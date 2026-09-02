@@ -81,11 +81,10 @@
 }
 
 .step__pause {
-  margin-block-start: 0.125rem;
-  font-size: 0.75rem;
-  line-height: 1;
+  display: flex;
+  justify-content: center;
+  margin-block-start: 0.3rem;
   color: var(--color-text-muted);
-  text-align: center;
 }
 
 .step__title--plain {

@@ -14,6 +14,7 @@ import {
   type TrackPlan,
 } from '../schedule'
 import { AnimatedNumber } from './AnimatedNumber'
+import { PauseIcon } from './icons'
 import { ProgressRing } from './ProgressRing'
 
 interface TrackSectionProps {
@@ -143,7 +144,9 @@ function StepItem({ step, checked, scheduled, isSkipped, onToggle, onSkip }: Ste
   if (isSkipped && !checked) {
     return (
       <li className="step step--skipped">
-        <span className="step__pause" aria-hidden="true">⏸</span>
+        <span className="step__pause" aria-hidden="true">
+          <PauseIcon />
+        </span>
         <p className="step__title step__title--plain">
           {item.title}
           {item.meta && <span className="step__meta"> · {item.meta}</span>}

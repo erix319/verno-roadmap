@@ -22,8 +22,17 @@
 }
 
 .reminder-banner__title {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
   font-weight: 600;
   font-size: var(--font-size-md);
+}
+
+.reminder-banner__icon {
+  flex-shrink: 0;
+  margin-block-start: 0.1875rem;
+  color: var(--color-track-a-text);
 }
 
 .reminder-banner__text {
