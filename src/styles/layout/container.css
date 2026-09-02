@@ -1,0 +1,16 @@
+.container {
+  width: min(100% - 2.5rem, var(--container-width));
+  margin-inline: auto;
+  padding-block: var(--spacing-xl) var(--spacing-2xl);
+}
+
+.page-section {
+  padding-block: var(--spacing-lg) var(--spacing-sm);
+  border-block-start: var(--border-width) solid var(--color-border);
+}
+
+.page-section__header {
+  display: grid;
+  gap: var(--spacing-xs);
+  margin-block-end: var(--spacing-md);
+}

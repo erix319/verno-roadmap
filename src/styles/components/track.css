@@ -1,0 +1,57 @@
+.tracks {
+  display: grid;
+  gap: var(--spacing-lg);
+  padding-block-start: var(--spacing-lg);
+}
+
+.track {
+  display: grid;
+  gap: 0.875rem;
+  align-content: start;
+  min-width: 0;
+}
+
+.track__header {
+  display: grid;
+  gap: var(--spacing-xs);
+  padding: 0.875rem 1rem 0.75rem;
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-block-start: 4px solid var(--color-track-a);
+  border-radius: var(--radius-md);
+}
+
+.track--b .track__header {
+  border-block-start-color: var(--color-track-b);
+}
+
+.track__goal {
+  font-size: var(--font-size-md);
+  color: var(--color-text-muted);
+}
+
+.track__meta {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs) var(--spacing-md);
+  margin-block-start: var(--spacing-xs);
+  font-family: var(--font-family-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.track__steps {
+  list-style: none;
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+@media (min-width: 64rem) {
+  .tracks {
+    grid-template-columns: 1fr 1fr;
+  }
+}

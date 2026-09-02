@@ -1,0 +1,24 @@
+.hero {
+  display: grid;
+  gap: var(--spacing-md);
+  padding-block-end: var(--spacing-lg);
+  border-block-end: var(--border-width) solid var(--color-border);
+}
+
+.hero__lead {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  max-width: 70ch;
+}
+
+.hero__lead strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.hero__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
+  gap: var(--spacing-sm);
+  list-style: none;
+}

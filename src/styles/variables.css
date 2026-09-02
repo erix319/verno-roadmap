@@ -1,0 +1,62 @@
+:root {
+  --color-background: #f2f4f7;
+  --color-surface: #ffffff;
+  --color-text: #1a2430;
+  --color-text-muted: #5a6b7c;
+  --color-border: #d3dae3;
+  --color-track-a: #b86f0a;
+  --color-track-a-text: #7a4a05;
+  --color-track-a-surface: #fbebd2;
+  --color-track-b: #2f6f9f;
+  --color-track-b-text: #1f4f73;
+  --color-track-b-surface: #dbe9f5;
+  --color-success: #2e7d5b;
+  --color-focus: #2f6f9f;
+  --color-on-accent: #ffffff;
+
+  --font-family-display: 'Unbounded', 'Golos Text', system-ui, sans-serif;
+  --font-family-primary: 'Golos Text', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-family-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --font-size-xs: 0.6875rem;
+  --font-size-sm: 0.8125rem;
+  --font-size-md: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.0625rem;
+  --font-size-xl: 1.1875rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-title: clamp(1.75rem, 4.2vw, 2.5rem);
+
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 2.5rem;
+
+  --radius-sm: 0.1875rem;
+  --radius-md: 0.375rem;
+
+  --border-width: 1px;
+  --container-width: 70rem;
+  --transition-fast: 150ms ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #0f151c;
+    --color-surface: #171f29;
+    --color-text: #e4eaf0;
+    --color-text-muted: #93a2b1;
+    --color-border: #2a3644;
+    --color-track-a: #e6a63c;
+    --color-track-a-text: #f3c77a;
+    --color-track-a-surface: #3a2c12;
+    --color-track-b: #5a9bd0;
+    --color-track-b-text: #a9cdeb;
+    --color-track-b-surface: #16283a;
+    --color-success: #5dc496;
+    --color-focus: #5a9bd0;
+    --color-on-accent: #0f151c;
+  }
+}

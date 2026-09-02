@@ -1,0 +1,9 @@
+.site-footer {
+  display: grid;
+  gap: var(--spacing-xs);
+  margin-block-start: var(--spacing-xl);
+  padding-block-start: var(--spacing-md);
+  border-block-start: var(--border-width) solid var(--color-border);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}

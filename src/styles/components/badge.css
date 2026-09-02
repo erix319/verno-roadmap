@@ -1,0 +1,25 @@
+.badge {
+  display: inline-block;
+  margin-inline-start: var(--spacing-sm);
+  padding: 0 0.3125rem;
+  border: var(--border-width) solid currentColor;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-mono);
+  font-size: 0.625rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: 0.0625rem;
+}
+
+.badge--free {
+  color: var(--color-success);
+}
+
+.badge--practice {
+  color: var(--color-track-b-text);
+}
+
+.badge--optional {
+  color: var(--color-text-muted);
+}

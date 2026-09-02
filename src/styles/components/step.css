@@ -1,0 +1,94 @@
+.step {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr;
+  gap: var(--spacing-sm) 0.625rem;
+  align-items: start;
+  padding: 0.75rem 0.875rem;
+  border-block-start: var(--border-width) solid var(--color-border);
+}
+
+.step:first-child {
+  border-block-start: 0;
+}
+
+.step__checkbox {
+  width: 1rem;
+  height: 1rem;
+  margin: 0.25rem 0 0;
+  cursor: pointer;
+  accent-color: var(--color-track-a);
+}
+
+.track--b .step__checkbox {
+  accent-color: var(--color-track-b);
+}
+
+.step__title {
+  font-weight: 600;
+  font-size: var(--font-size-md);
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.step__meta {
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.step__note {
+  grid-column: 2;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.step__hours {
+  grid-column: 2;
+  font-family: var(--font-family-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+
+.step__hours-value {
+  font-weight: 500;
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  margin-inline-end: var(--spacing-sm);
+}
+
+.step--done .step__title {
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.step--done .step__note {
+  opacity: 0.7;
+}
+
+.step--parked {
+  opacity: 0.62;
+}
+
+.step--parked .step__title {
+  font-weight: 500;
+}
+
+@media (min-width: 48rem) {
+  .step {
+    grid-template-columns: 1.5rem 1fr 6.75rem;
+  }
+
+  .step__hours {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    text-align: end;
+    padding-block-start: 0.125rem;
+  }
+
+  .step__hours-value {
+    display: block;
+    margin-inline-end: 0;
+  }
+}

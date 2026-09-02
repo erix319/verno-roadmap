@@ -1,0 +1,120 @@
+.timeline {
+  margin: 0;
+  padding-block: var(--spacing-lg) var(--spacing-sm);
+  border-block-end: var(--border-width) solid var(--color-border);
+}
+
+.timeline__caption {
+  display: grid;
+  gap: var(--spacing-xs);
+  margin-block-end: var(--spacing-md);
+  text-align: start;
+}
+
+.timeline__scroll {
+  overflow-x: auto;
+}
+
+.timeline__chart {
+  display: grid;
+  grid-template-columns: 5.75rem 1fr;
+  gap: var(--spacing-sm) 0;
+  min-width: 40rem;
+  padding-block-start: 1.75rem;
+  /* половина ширины ромба, чтобы веха на 100 % не срезалась краем прокрутки */
+  padding-inline-end: 0.8125rem;
+}
+
+.timeline__months {
+  grid-column: 2;
+  position: relative;
+  height: 1.125rem;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.timeline__month {
+  position: absolute;
+  inset-block-start: 0;
+  transform: translateX(-50%);
+}
+
+.timeline__month::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-start: 1.125rem;
+  width: 1px;
+  height: 4.75rem;
+  background: var(--color-border);
+}
+
+.timeline__month--university {
+  inset-block-start: -1.25rem;
+  transform: translateX(-100%);
+  padding-inline-end: 0.375rem;
+  white-space: nowrap;
+  color: var(--color-text);
+}
+
+.timeline__month--university::before {
+  inset-inline-start: 100%;
+  inset-block-start: 2.375rem;
+  width: 2px;
+  height: 3.5rem;
+  background: var(--color-text);
+}
+
+.timeline__row-label {
+  font-size: var(--font-size-sm);
+  align-self: center;
+}
+
+.timeline__row {
+  position: relative;
+  height: 1.625rem;
+}
+
+.timeline__bar {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.25rem;
+  height: 1.125rem;
+  border-radius: var(--radius-sm);
+}
+
+.timeline__bar--track-a {
+  background: var(--color-track-a);
+}
+
+.timeline__bar--track-b {
+  background: var(--color-track-b);
+}
+
+.timeline__milestone {
+  position: absolute;
+  inset-block-start: 0;
+  display: grid;
+  place-items: center;
+  width: 1.625rem;
+  height: 1.625rem;
+  transform: translateX(-50%);
+}
+
+.timeline__milestone-marker {
+  position: absolute;
+  width: 0.875rem;
+  height: 0.875rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-text);
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+
+.timeline__milestone-number {
+  position: relative;
+  font-family: var(--font-family-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+}

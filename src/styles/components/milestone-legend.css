@@ -1,0 +1,46 @@
+.milestone-legend {
+  display: grid;
+  gap: var(--spacing-xs) var(--spacing-lg);
+  margin-block-start: 0.75rem;
+  list-style: none;
+}
+
+.milestone-legend__item {
+  display: grid;
+  grid-template-columns: 1.375rem 1fr auto;
+  gap: var(--spacing-sm);
+  align-items: baseline;
+  padding-block: 0.1875rem;
+  font-size: var(--font-size-sm);
+}
+
+.milestone-legend__number {
+  padding-block: 0.0625rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  text-align: center;
+  color: var(--color-on-accent);
+}
+
+.milestone-legend__number--track-a {
+  background: var(--color-track-a);
+}
+
+.milestone-legend__number--track-b {
+  background: var(--color-track-b);
+}
+
+.milestone-legend__date {
+  font-family: var(--font-family-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+@media (min-width: 48rem) {
+  .milestone-legend {
+    grid-template-columns: 1fr 1fr;
+  }
+}
