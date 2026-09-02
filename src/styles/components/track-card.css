@@ -18,6 +18,27 @@
   border-block-start-color: var(--color-track-b);
 }
 
+.track-card {
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.track-card:hover {
+  transform: translateY(-2px);
+}
+
+.track-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+}
+
+.track-card__heading {
+  display: grid;
+  gap: var(--spacing-xs);
+  min-width: 0;
+}
+
 .track-card__title {
   font-family: var(--font-family-display);
   font-size: var(--font-size-lg);

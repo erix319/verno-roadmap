@@ -39,11 +39,18 @@ export interface TrackPlan {
   finish: Date | null
 }
 
+/** Фактически распределённые часы одной недели расписания */
+export interface WeekLoad {
+  start: Date
+  hours: Record<TrackId, number>
+}
+
 export interface Plan {
   start: Date
   tracks: Record<TrackId, TrackPlan>
   end: Date
   weeks: number
+  load: WeekLoad[]
 }
 
 export function todayISO(): string {
@@ -122,6 +129,7 @@ export function buildPlan(settings: Settings, done: DoneMap, skipped: SkippedMap
   const remainingOf = (t: TrackId) =>
     queues[t].slice(cursor[t]).reduce((s, p) => s + p.remaining, 0)
 
+  const load: WeekLoad[] = []
   let week = 0
   const MAX_WEEKS = 260
   while (week < MAX_WEEKS && (remainingOf('A') > 0 || remainingOf('B') > 0)) {
@@ -137,6 +145,7 @@ export function buildPlan(settings: Settings, done: DoneMap, skipped: SkippedMap
     if (remB <= 0) { hoursA = capacity; hoursB = 0 }
 
     const budgets: Record<TrackId, number> = { A: hoursA, B: hoursB }
+    const consumed: Record<TrackId, number> = { A: 0, B: 0 }
     for (const t of ['A', 'B'] as TrackId[]) {
       let budget = budgets[t]
       const trackCapacity = budgets[t]
@@ -162,7 +171,9 @@ export function buildPlan(settings: Settings, done: DoneMap, skipped: SkippedMap
           cursor[t]++
         }
       }
+      consumed[t] = trackCapacity - budget
     }
+    if (consumed.A > 0.001 || consumed.B > 0.001) load.push({ start: weekStart, hours: { ...consumed } })
     week++
   }
 
@@ -187,5 +198,5 @@ export function buildPlan(settings: Settings, done: DoneMap, skipped: SkippedMap
   }
 
   const weeks = Math.max(0, Math.round((end.getTime() - start.getTime()) / (7 * 86400000)))
-  return { start, tracks, end, weeks }
+  return { start, tracks, end, weeks, load }
 }

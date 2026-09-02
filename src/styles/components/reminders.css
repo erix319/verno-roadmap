@@ -11,6 +11,14 @@
   background: var(--color-track-a-surface);
   border: var(--border-width) solid var(--color-track-a);
   border-radius: var(--radius-lg);
+  animation: reminder-in 300ms ease;
+}
+
+@keyframes reminder-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
 }
 
 .reminder-banner__title {

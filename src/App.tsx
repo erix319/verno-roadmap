@@ -18,6 +18,7 @@ import {
 import { AppNav } from './components/AppNav'
 import { Hero } from './components/Hero'
 import { Recommendation } from './components/Recommendation'
+import { LoadChart } from './components/LoadChart'
 import { ScheduleControls } from './components/ScheduleControls'
 import { Timeline } from './components/Timeline'
 import { TrackCard } from './components/TrackCard'
@@ -161,6 +162,7 @@ export default function App() {
               </section>
               <ScheduleControls settings={settings} onChange={setSettings} onResetProgress={resetProgress} />
               <Timeline plan={plan} />
+              <LoadChart plan={plan} settings={settings} />
               <RemindersSection
                 reminders={reminders}
                 dismissed={dismissedReminders}

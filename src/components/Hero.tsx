@@ -1,4 +1,5 @@
 import { fmtDateYear, fmtHours, type Plan } from '../schedule'
+import { AnimatedNumber } from './AnimatedNumber'
 
 interface HeroProps {
   plan: Plan
@@ -10,10 +11,10 @@ export function Hero({ plan }: HeroProps) {
   const percent = total ? Math.round((done / total) * 100) : 0
 
   const stats = [
-    { value: fmtHours(plan.tracks.A.remaining), unit: 'ч', label: `осталось в треке A · финиш ${fmtDateYear(plan.tracks.A.finish)}` },
-    { value: fmtHours(plan.tracks.B.remaining), unit: 'ч', label: `осталось в треке B · финиш ${fmtDateYear(plan.tracks.B.finish)}` },
-    { value: String(plan.weeks), unit: 'нед', label: 'до закрытия обоих треков при текущих настройках' },
-    { value: String(percent), unit: '%', label: `отмечено · ${fmtHours(done)} из ${fmtHours(total)} ч` },
+    { value: plan.tracks.A.remaining, format: fmtHours, unit: 'ч', label: `осталось в треке A · финиш ${fmtDateYear(plan.tracks.A.finish)}` },
+    { value: plan.tracks.B.remaining, format: fmtHours, unit: 'ч', label: `осталось в треке B · финиш ${fmtDateYear(plan.tracks.B.finish)}` },
+    { value: plan.weeks, format: undefined, unit: 'нед', label: 'до закрытия обоих треков при текущих настройках' },
+    { value: percent, format: undefined, unit: '%', label: `отмечено · ${fmtHours(done)} из ${fmtHours(total)} ч` },
   ]
 
   return (
@@ -29,7 +30,7 @@ export function Hero({ plan }: HeroProps) {
         {stats.map((stat) => (
           <li className="stat-card" key={stat.label}>
             <p className="stat-card__value">
-              {stat.value}
+              <AnimatedNumber value={stat.value} format={stat.format} />
               <span className="stat-card__unit">{stat.unit}</span>
             </p>
             <p className="stat-card__label">{stat.label}</p>

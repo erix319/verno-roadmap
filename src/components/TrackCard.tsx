@@ -1,6 +1,7 @@
 import { TRACKS } from '../data'
 import { fmtDate, fmtDateYear, fmtHours, isDone, isScheduled, type DoneMap, type Settings, type SkippedMap, type TrackPlan } from '../schedule'
 import { ROUTE_META } from '../router'
+import { ProgressRing } from './ProgressRing'
 
 interface TrackCardProps {
   trackPlan: TrackPlan
@@ -23,20 +24,26 @@ export function TrackCard({ trackPlan, done, skipped, settings }: TrackCardProps
 
   return (
     <article className={`track-card ${modifier}`}>
-      <p className="eyebrow">Трек {track.id} · {share} % недели</p>
-      <h3 className="track-card__title">
-        <a href={hash}>{track.name}</a>
-      </h3>
-      <p className="track-card__goal">{track.goal}</p>
+      <div className="track-card__head">
+        <div className="track-card__heading">
+          <p className="eyebrow">Трек {track.id} · {share} % недели</p>
+          <h3 className="track-card__title">
+            <a href={hash}>{track.name}</a>
+          </h3>
+          <p className="track-card__goal">{track.goal}</p>
+        </div>
+        <ProgressRing
+          percent={percent}
+          color={track.id === 'A' ? 'var(--color-track-a)' : 'var(--color-track-b)'}
+          label={`Прогресс трека ${track.id}: ${percent} %`}
+        />
+      </div>
       <p className="track-card__meta">
         <span>
           {fmtHours(trackPlan.done)} / {fmtHours(trackPlan.total)} ч · {percent} %
         </span>
         <span>финиш · {fmtDateYear(trackPlan.finish)}</span>
       </p>
-      <span className="progress-bar" role="progressbar" aria-label={`Прогресс трека ${track.id}`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={percent}>
-        <span className={`progress-bar__fill progress-bar__fill--${track.id === 'A' ? 'track-a' : 'track-b'}`} style={{ width: `${percent}%` }} />
-      </span>
       {next ? (
         <p className="track-card__next">
           <span className="track-card__next-label">следующий шаг</span>
