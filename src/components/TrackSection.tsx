@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { HABITS, TRACKS, type Item } from '../data'
 import {
   fmtDate,
@@ -12,6 +13,8 @@ import {
   type SkippedMap,
   type TrackPlan,
 } from '../schedule'
+import { AnimatedNumber } from './AnimatedNumber'
+import { ProgressRing } from './ProgressRing'
 
 interface TrackSectionProps {
   trackPlan: TrackPlan
@@ -22,13 +25,15 @@ interface TrackSectionProps {
   onSkip: (id: string) => void
   /** 1 — на странице трека (заголовок страницы), 2 — в общем списке */
   headingLevel?: 1 | 2
+  /** Контент между шапкой трека и списком шагов (календарь на странице трека) */
+  afterHeader?: ReactNode
 }
 
 function formatNumber(value: number): string {
   return String(value).replace('.', ',')
 }
 
-export function TrackSection({ trackPlan, done, settings, skipped, onToggle, onSkip, headingLevel = 2 }: TrackSectionProps) {
+export function TrackSection({ trackPlan, done, settings, skipped, onToggle, onSkip, headingLevel = 2, afterHeader }: TrackSectionProps) {
   const track = TRACKS.find((candidate) => candidate.id === trackPlan.track)
   if (!track) return null
 
@@ -43,24 +48,31 @@ export function TrackSection({ trackPlan, done, settings, skipped, onToggle, onS
   return (
     <section className={`track ${modifier}`} aria-labelledby={titleId}>
       <header className="track__header">
-        <p className="eyebrow">Трек {track.id}</p>
-        <Heading id={titleId} className="track__title">{track.name}</Heading>
-        <p className="track__goal">{track.goal}</p>
-        <p className="track__meta">
-          <span>
-            {fmtHours(trackPlan.done)} / {fmtHours(trackPlan.total)} ч · {percent} %
-          </span>
-          {skippedSteps.length > 0 && (
+        <div className="track__header-main">
+          <p className="eyebrow">Трек {track.id}</p>
+          <Heading id={titleId} className="track__title">{track.name}</Heading>
+          <p className="track__goal">{track.goal}</p>
+          <p className="track__meta">
             <span>
-              отложено · {skippedSteps.length} ш. · {fmtHours(skippedHours)} ч
+              <AnimatedNumber value={trackPlan.done} format={fmtHours} /> / {fmtHours(trackPlan.total)} ч · {percent} %
             </span>
-          )}
-          <span>финиш · {fmtDateYear(trackPlan.finish)}</span>
-        </p>
-        <span className="progress-bar" role="progressbar" aria-label={`Прогресс трека ${track.id}`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={percent}>
-          <span className={`progress-bar__fill progress-bar__fill--${track.id === 'A' ? 'track-a' : 'track-b'}`} style={{ width: `${percent}%` }} />
-        </span>
+            {skippedSteps.length > 0 && (
+              <span>
+                отложено · {skippedSteps.length} ш. · {fmtHours(skippedHours)} ч
+              </span>
+            )}
+            <span>финиш · {fmtDateYear(trackPlan.finish)}</span>
+          </p>
+        </div>
+        <ProgressRing
+          percent={percent}
+          color={track.id === 'A' ? 'var(--color-track-a)' : 'var(--color-track-b)'}
+          label={`Прогресс трека ${track.id}: ${percent} %`}
+          size={72}
+        />
       </header>
+
+      {afterHeader}
 
       <ol className="track__steps">
         {trackPlan.items.map((step) =>

@@ -4,12 +4,15 @@ import { addDays, fmtDate, MONTHS_SHORT, parseISO, toISO, type Plan } from '../s
 
 interface TimelineProps {
   plan: Plan
+  /** Показать только один трек (страница трека) */
+  only?: TrackId
 }
 
 const MIN_SPAN_WEEKS = 8
 const TRACK_IDS: TrackId[] = ['A', 'B']
 
-export function Timeline({ plan }: TimelineProps) {
+export function Timeline({ plan, only }: TimelineProps) {
+  const trackIds: TrackId[] = only ? [only] : TRACK_IDS
   const start = plan.start
   const minEnd = addDays(start, MIN_SPAN_WEEKS * 7)
   const end = plan.end > minEnd ? plan.end : minEnd
@@ -27,7 +30,7 @@ export function Timeline({ plan }: TimelineProps) {
   const showUniversity = university > start && university <= end
 
   let counter = 0
-  const milestones = TRACK_IDS.flatMap((trackId) =>
+  const milestones = trackIds.flatMap((trackId) =>
     plan.tracks[trackId].items
       .filter((step) => step.item.kind === 'milestone' && step.finish)
       .map((step) => ({ trackId, step, number: ++counter })),
@@ -55,7 +58,7 @@ export function Timeline({ plan }: TimelineProps) {
             )}
           </div>
 
-          {TRACK_IDS.map((trackId) => {
+          {trackIds.map((trackId) => {
             const track = plan.tracks[trackId]
             const modifier = trackId === 'A' ? 'track-a' : 'track-b'
             return (
