@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, type CSSProperties } from 'react'
 import { UNI_DATE, type TrackId } from '../data'
 import { addDays, fmtDate, MONTHS_SHORT, parseISO, toISO, type Plan } from '../schedule'
 
@@ -40,11 +40,26 @@ export function Timeline({ plan, only }: TimelineProps) {
     <figure className="timeline">
       <figcaption className="timeline__caption">
         <h2>Календарь</h2>
-        <p className="section-lead">Полосы — сколько длится каждый трек при текущем делении недели; ромбы — вехи, когда появляется новая услуга или результат.</p>
+        <p className="section-lead">
+          Полосы — сколько длится каждый трек при текущем делении недели, заливка внутри показывает отмеченные часы; ромбы — вехи, когда появляется новая услуга
+          или результат.
+        </p>
       </figcaption>
 
+      {/* График декоративен для скринридера — то же содержание словами */}
+      <p className="visually-hidden">
+        {trackIds
+          .map((trackId) => {
+            const track = plan.tracks[trackId]
+            const percent = track.total ? Math.round((track.done / track.total) * 100) : 0
+            return `Трек ${trackId}: отмечено ${percent} %, финиш ${fmtDate(track.finish)}. `
+          })
+          .join('')}
+        Возвращение в вуз 9 февраля 2027.
+      </p>
+
       <div className="timeline__scroll">
-        <div className="timeline__chart" aria-hidden="true">
+        <div className="timeline__chart" style={{ '--timeline-rows': trackIds.length } as CSSProperties} aria-hidden="true">
           <div className="timeline__months">
             {months.map((month) => (
               <span className="timeline__month" key={`${month.label}-${month.x}`} style={{ insetInlineStart: `${month.x}%` }}>
@@ -61,11 +76,14 @@ export function Timeline({ plan, only }: TimelineProps) {
           {trackIds.map((trackId) => {
             const track = plan.tracks[trackId]
             const modifier = trackId === 'A' ? 'track-a' : 'track-b'
+            const percent = track.total ? Math.round((track.done / track.total) * 100) : 0
             return (
               <Fragment key={trackId}>
                 <span className="timeline__row-label">Трек {trackId}</span>
                 <div className="timeline__row">
-                  <span className={`timeline__bar timeline__bar--${modifier}`} style={{ width: `${track.finish ? positionOf(track.finish) : 0}%` }} />
+                  <span className={`timeline__bar timeline__bar--${modifier}`} style={{ width: `${track.finish ? positionOf(track.finish) : 0}%` }}>
+                    <span className={`timeline__fill timeline__fill--${modifier}`} style={{ width: `${percent}%` }} />
+                  </span>
                   {milestones
                     .filter((milestone) => milestone.trackId === trackId)
                     .map((milestone) => (

@@ -49,7 +49,8 @@
   inset-inline-start: 50%;
   inset-block-start: 1.125rem;
   width: 1px;
-  height: 4.75rem;
+  /* Высота засечки следует числу полос: строка 1.625rem + промежуток 0.5rem */
+  height: calc(var(--timeline-rows, 2) * 2.125rem + 0.5rem);
   background: var(--color-border);
 }
 
@@ -65,7 +66,7 @@
   inset-inline-start: 100%;
   inset-block-start: 2.375rem;
   width: 2px;
-  height: 3.5rem;
+  height: calc(var(--timeline-rows, 2) * 2.125rem - 0.75rem);
   background: var(--color-text);
 }
 
@@ -85,13 +86,29 @@
   inset-block-start: 0.25rem;
   height: 1.125rem;
   border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
+/* Полоса — приглушённый фон на всю длину трека, заливка внутри = отмеченные часы */
 .timeline__bar--track-a {
-  background: var(--color-track-a);
+  background: var(--color-track-a-surface);
 }
 
 .timeline__bar--track-b {
+  background: var(--color-track-b-surface);
+}
+
+.timeline__fill {
+  display: block;
+  height: 100%;
+  transition: width 300ms ease;
+}
+
+.timeline__fill--track-a {
+  background: var(--color-track-a);
+}
+
+.timeline__fill--track-b {
   background: var(--color-track-b);
 }
 
