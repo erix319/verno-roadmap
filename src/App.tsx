@@ -26,6 +26,7 @@ import { ScheduleControls } from './components/ScheduleControls'
 import { Timeline } from './components/Timeline'
 import { TrackCard } from './components/TrackCard'
 import { TrackPage } from './components/TrackPage'
+import { OverallProgress } from './components/OverallProgress'
 import { SkippedSection } from './components/SkippedSection'
 import { BackupSection } from './components/BackupSection'
 import { buildReminderViews, countDueReminders, ReminderBanner, RemindersSection } from './components/Reminders'
@@ -196,6 +197,7 @@ export default function App() {
           <TrackPage trackId={route} plan={plan} done={done} skipped={skipped} settings={settings} onToggle={toggleStep} onSkip={toggleSkip} />
         )}
       </div>
+      {route !== 'home' && <OverallProgress plan={plan} />}
       <footer className="site-footer">
         <p>
           Часы работы = видео × коэффициент: курсы с кодом ×2, no-code и дизайн ×1,5, справочные ×1,2. Длительности — из библиотеки Udemy на 2 сентября 2026, цены услуг — с

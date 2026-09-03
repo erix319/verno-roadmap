@@ -19,7 +19,8 @@
 @import './components/milestone-legend.css';
 @import './components/track.css';
 @import './components/step.css';
-@import './components/milestone.css';
+@import './components/stage.css';
+@import './components/overall-progress.css';
 @import './components/habit-list.css';
 @import './components/skipped-list.css';
 @import './utilities/link-button.css';

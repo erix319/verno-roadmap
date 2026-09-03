@@ -1,4 +1,7 @@
 .timeline {
+  /* Внутри grid-страницы трека элемент по умолчанию не уже своего содержимого:
+     без min-width: 0 календарь шириной 40rem растягивал всю страницу вместо прокрутки */
+  min-width: 0;
   margin: 0;
   padding-block: var(--spacing-lg) var(--spacing-sm);
   border-block-end: var(--border-width) solid var(--color-border);

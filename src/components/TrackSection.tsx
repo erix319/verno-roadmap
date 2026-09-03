@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { HABITS, TRACKS, type Item } from '../data'
+import { HABITS, TRACKS, type Item, type TrackId } from '../data'
 import {
   fmtDate,
   fmtDateYear,
@@ -75,23 +75,20 @@ export function TrackSection({ trackPlan, done, settings, skipped, onToggle, onS
 
       {afterHeader}
 
-      <ol className="track__steps">
-        {trackPlan.items.map((step) =>
-          step.item.kind === 'milestone' ? (
-            <MilestoneItem key={step.item.id} step={step} checked={isDone(step.item, done)} />
-          ) : (
-            <StepItem
-              key={step.item.id}
-              step={step}
-              checked={isDone(step.item, done)}
-              scheduled={isScheduled(step.item, settings, skipped)}
-              isSkipped={!!skipped[step.item.id]}
-              onToggle={onToggle}
-              onSkip={onSkip}
-            />
-          ),
-        )}
-      </ol>
+      <div className="stages">
+        {buildStages(trackPlan.items).map((stage) => (
+          <StageCard
+            key={stage.n}
+            stage={stage}
+            trackId={track.id}
+            done={done}
+            settings={settings}
+            skipped={skipped}
+            onToggle={onToggle}
+            onSkip={onSkip}
+          />
+        ))}
+      </div>
 
       <div className="habits">
         <p className="eyebrow">Привычки трека — не в часах, а каждый день</p>
@@ -108,23 +105,104 @@ export function TrackSection({ trackPlan, done, settings, skipped, onToggle, onS
   )
 }
 
-interface MilestoneItemProps {
-  step: ItemPlan
-  checked: boolean
+/** Этап — отрезок трека до ближайшей вехи; веха закрывает этап и служит его целью */
+interface Stage {
+  n: number
+  goal: ItemPlan | null
+  steps: ItemPlan[]
 }
 
-function MilestoneItem({ step, checked }: MilestoneItemProps) {
-  const dateLabel = checked ? 'готово' : step.finish ? `≈ ${fmtDate(step.finish)}` : '—'
+function buildStages(items: ItemPlan[]): Stage[] {
+  const stages: Stage[] = []
+  let current: ItemPlan[] = []
+  for (const step of items) {
+    if (step.item.kind === 'milestone') {
+      stages.push({ n: stages.length + 1, goal: step, steps: current })
+      current = []
+    } else {
+      current.push(step)
+    }
+  }
+  if (current.length > 0) stages.push({ n: stages.length + 1, goal: null, steps: current })
+  return stages
+}
+
+interface StageCardProps {
+  stage: Stage
+  trackId: TrackId
+  done: DoneMap
+  settings: Settings
+  skipped: SkippedMap
+  onToggle: (id: string) => void
+  onSkip: (id: string) => void
+}
+
+function StageCard({ stage, trackId, done, settings, skipped, onToggle, onSkip }: StageCardProps) {
+  // В знаменателе только шаги «в игре»: отложенные из счёта уходят, как и из расписания
+  const counted = stage.steps.filter((step) => isDone(step.item, done) || isScheduled(step.item, settings, skipped))
+  const doneSteps = counted.filter((step) => isDone(step.item, done))
+  const totalHours = counted.reduce((sum, step) => sum + step.item.hours, 0)
+  const doneHours = doneSteps.reduce((sum, step) => sum + step.item.hours, 0)
+  const percent = totalHours ? Math.round((doneHours / totalHours) * 100) : 0
+  const allDone = counted.length > 0 && doneSteps.length === counted.length
+  // Шаги «по желанию» и отложенные остаются в списке, но не в счёте — иначе цифры не сходятся с видимыми строками
+  const parked = stage.steps.length - counted.length
+  const goalDone = stage.goal ? isDone(stage.goal.item, done) || allDone : false
+
   return (
-    <li className="milestone">
-      {step.finish && !checked ? (
-        <time className="milestone__date" dateTime={toISO(step.finish)}>{dateLabel}</time>
-      ) : (
-        <span className="milestone__date">{dateLabel}</span>
+    <details className="stage" open={!allDone}>
+      <summary className="stage__summary">
+        <span className="stage__name">
+          Этап {stage.n}
+          {stage.goal && <span className="stage__goal"> · {stage.goal.item.title}</span>}
+          {!stage.goal && <span className="stage__goal"> · дальше, без отдельной вехи</span>}
+        </span>
+        <span className="stage__count">
+          {doneSteps.length}/{counted.length} · {fmtHours(doneHours)} из {fmtHours(totalHours)} ч
+          {parked > 0 && <span className="stage__parked"> · {parked} вне расписания</span>}
+        </span>
+      </summary>
+
+      <span
+        className="progress-bar stage__bar"
+        role="progressbar"
+        aria-label={`Прогресс этапа ${stage.n}`}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={percent}
+      >
+        <span className={`progress-bar__fill progress-bar__fill--${trackId === 'A' ? 'track-a' : 'track-b'}`} style={{ width: `${percent}%` }} />
+      </span>
+
+      {stage.goal && (
+        <p className="stage__goal-note">
+          {goalDone ? (
+            <span className="stage__goal-date">открыто</span>
+          ) : stage.goal.finish ? (
+            <time className="stage__goal-date" dateTime={toISO(stage.goal.finish)}>
+              ≈ {fmtDate(stage.goal.finish)}
+            </time>
+          ) : (
+            <span className="stage__goal-date">—</span>
+          )}
+          {stage.goal.item.note}
+        </p>
       )}
-      <p className="milestone__title">{step.item.title}</p>
-      <p className="milestone__note">{step.item.note}</p>
-    </li>
+
+      <ol className="stage__steps">
+        {stage.steps.map((step) => (
+          <StepItem
+            key={step.item.id}
+            step={step}
+            checked={isDone(step.item, done)}
+            scheduled={isScheduled(step.item, settings, skipped)}
+            isSkipped={!!skipped[step.item.id]}
+            onToggle={onToggle}
+            onSkip={onSkip}
+          />
+        ))}
+      </ol>
+    </details>
   )
 }
 

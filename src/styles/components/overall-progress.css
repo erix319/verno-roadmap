@@ -1,0 +1,29 @@
+/* Плавающее кольцо общего прогресса в правом нижнем углу.
+   Зона нажатия ≈ 64 px — крупнее минимальных 44 px даже на телефоне. */
+.overall-progress {
+  position: fixed;
+  inset-block-end: var(--spacing-md);
+  inset-inline-end: var(--spacing-md);
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 0.3125rem;
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: 50%;
+  box-shadow: 0 0.5rem 1.25rem rgb(0 0 0 / 35%);
+  text-decoration: none;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.overall-progress:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-text-muted);
+}
+
+@media (min-width: 48rem) {
+  .overall-progress {
+    inset-block-end: var(--spacing-lg);
+    inset-inline-end: var(--spacing-lg);
+  }
+}
