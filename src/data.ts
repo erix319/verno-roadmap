@@ -21,6 +21,8 @@ export interface Item {
   optional?: boolean
   /** Уже пройдено (Tilda) */
   done?: boolean
+  /** Ссылка на сам материал: страница курса на Udemy, плейлист на YouTube, документация */
+  url?: string
 }
 
 export interface Habit {
@@ -69,6 +71,7 @@ export const ITEMS: Item[] = [
     hours: 0,
     video: 14.5,
     done: true,
+    url: 'https://www.udemy.com/course/tilda-essential/',
   },
   {
     id: 'a-webflow',
@@ -80,6 +83,7 @@ export const ITEMS: Item[] = [
     hours: 12,
     video: 8.1,
     factor: 1.5,
+    url: 'https://www.udemy.com/course/webflow-s/',
   },
   {
     id: 'a-figma',
@@ -91,6 +95,7 @@ export const ITEMS: Item[] = [
     hours: 15,
     video: 10,
     factor: 1.5,
+    url: 'https://www.udemy.com/course/web-figma-ui/',
   },
   {
     id: 'a-theory',
@@ -102,6 +107,7 @@ export const ITEMS: Item[] = [
     hours: 7,
     video: 6,
     factor: 1.2,
+    url: 'https://www.udemy.com/course/cniiaptv/',
   },
   {
     id: 'a-sales-kit',
@@ -121,6 +127,7 @@ export const ITEMS: Item[] = [
     hours: 70,
     video: 35,
     factor: 2,
+    url: 'https://www.udemy.com/course/all-wordpress/',
   },
   {
     id: 'm-a-wp',
@@ -140,6 +147,7 @@ export const ITEMS: Item[] = [
     hours: 70,
     video: 35,
     factor: 2,
+    url: 'https://www.udemy.com/course/all-wordpress/',
   },
   {
     id: 'm-a-shop',
@@ -160,6 +168,7 @@ export const ITEMS: Item[] = [
     video: 5,
     factor: 2,
     optional: true,
+    url: 'https://www.udemy.com/course/php-8-ua/',
   },
   {
     id: 'a-schiff',
@@ -171,6 +180,7 @@ export const ITEMS: Item[] = [
     hours: 24,
     video: 12,
     factor: 2,
+    url: 'https://www.udemy.com/course/become-a-wordpress-developer-php-javascript/',
   },
   {
     id: 'a-acf',
@@ -183,6 +193,7 @@ export const ITEMS: Item[] = [
     video: 11,
     factor: 1.5,
     optional: true,
+    url: 'https://www.udemy.com/course/wordpress-advanced-theme-development-with-acf-acf-pro/',
   },
   {
     id: 'a-ai',
@@ -194,6 +205,7 @@ export const ITEMS: Item[] = [
     hours: 10,
     video: 6.3,
     factor: 1.5,
+    url: 'https://www.udemy.com/course/ai-ai-cph/',
   },
   {
     id: 'm-a-ai',
@@ -213,6 +225,7 @@ export const ITEMS: Item[] = [
     hours: 54,
     video: 26.8,
     factor: 2,
+    url: 'https://www.udemy.com/course/php-8-framework/',
   },
   {
     id: 'a-bitrix',
@@ -222,6 +235,7 @@ export const ITEMS: Item[] = [
     meta: 'dev.1c-bitrix.ru/learning · academy.1c-bitrix.ru',
     note: 'Официальные бесплатные курсы: сначала «Разработчик», потом «Администратор» выборочно. Для практики — пробная версия «Управление сайтом». 40 ч — оценка, поправь по факту.',
     hours: 40,
+    url: 'https://dev.1c-bitrix.ru/learning/course/index.php?COURSE_ID=43',
   },
   {
     id: 'm-a-bitrix',
@@ -240,6 +254,7 @@ export const ITEMS: Item[] = [
     note: 'Онлайн-школы на GetCourse заявлены на сайте, но курса в библиотеке нет. Проходи, когда придёт первый такой заказ — или заранее, если парсер показывает спрос. 15 ч — оценка.',
     hours: 15,
     optional: true,
+    url: 'https://getcourse.ru/course/admin',
   },
   {
     id: 'a-shopify-1',
@@ -251,6 +266,7 @@ export const ITEMS: Item[] = [
     hours: 6,
     video: 5,
     factor: 1.2,
+    url: 'https://www.udemy.com/course/ultimate-shopify-course-beginner-to-shopify-expert-2024/',
   },
   {
     id: 'a-shopify-2',
@@ -262,6 +278,7 @@ export const ITEMS: Item[] = [
     hours: 32,
     video: 15.8,
     factor: 2,
+    url: 'https://www.udemy.com/course/the-complete-shopify-theme-development-course/',
   },
   {
     id: 'm-a-shopify',
@@ -282,6 +299,7 @@ export const ITEMS: Item[] = [
     video: 12.7,
     factor: 1.5,
     optional: true,
+    url: 'https://www.udemy.com/course/ux-design-foundation/',
   },
   {
     id: 'a-multilink',
@@ -293,6 +311,7 @@ export const ITEMS: Item[] = [
     hours: 1,
     video: 0.7,
     optional: true,
+    url: 'https://www.udemy.com/course/multilink-for-instagram/',
   },
 
   // ───────────────────────── Трек B — fullstack ─────────────────────────
@@ -304,6 +323,7 @@ export const ITEMS: Item[] = [
     meta: 'learn.javascript.ru',
     note: 'Разделы «Продвинутая работа с функциями» и «Асинхронность»: замыкания, промисы, Event Loop, микро- и макрозадачи. Первый пункт чек-листа DeepSeek — без этого не пишется серверный код.',
     hours: 15,
+    url: 'https://learn.javascript.ru/advanced-functions',
   },
   {
     id: 'b-node',
@@ -315,6 +335,7 @@ export const ITEMS: Item[] = [
     hours: 35,
     video: 17.7,
     factor: 2,
+    url: 'https://www.udemy.com/course/nodejs-ru/',
   },
   {
     id: 'b-sql',
@@ -324,6 +345,7 @@ export const ITEMS: Item[] = [
     meta: 'DBeaver · Neon или Supabase',
     note: 'В библиотеке нет ни одного курса по SQL, а оба чек-листа ставят PostgreSQL в обязательный минимум. SELECT / JOIN / INSERT, связь users → orders, индексы на пальцах. Хватит любого бесплатного тренажёра.',
     hours: 10,
+    url: 'https://pgexercises.com/',
   },
   {
     id: 'b-ts',
@@ -332,6 +354,7 @@ export const ITEMS: Item[] = [
     title: 'TypeScript — документация и handbook',
     note: 'Типы, generics, narrowing, utility-типы, tsconfig. В купленных курсах TypeScript встречается только у Ларичева и в SocketIO — базу лучше взять из первоисточника до них.',
     hours: 10,
+    url: 'https://www.typescriptlang.org/docs/handbook/intro.html',
   },
   {
     id: 'b-larichev',
@@ -343,6 +366,7 @@ export const ITEMS: Item[] = [
     hours: 36,
     video: 18.1,
     factor: 2,
+    url: 'https://www.udemy.com/course/nodejs-start/',
   },
   {
     id: 'b-tissen',
@@ -354,6 +378,7 @@ export const ITEMS: Item[] = [
     hours: 48,
     video: 24.1,
     factor: 2,
+    url: 'https://www.udemy.com/course/fullstack-react-nodejsexpress/',
   },
   {
     id: 'm-b-api',
@@ -373,6 +398,7 @@ export const ITEMS: Item[] = [
     hours: 13,
     video: 8.7,
     factor: 1.5,
+    url: 'https://www.udemy.com/course/mongodb-ru/',
   },
   {
     id: 'b-socketio',
@@ -384,6 +410,7 @@ export const ITEMS: Item[] = [
     hours: 5,
     video: 2.9,
     factor: 1.5,
+    url: 'https://www.udemy.com/course/typescript-socketio/',
   },
   {
     id: 'b-docker',
@@ -395,6 +422,7 @@ export const ITEMS: Item[] = [
     hours: 8,
     video: 3.7,
     factor: 2,
+    url: 'https://www.udemy.com/course/docker-and-docker-compose/',
   },
   {
     id: 'm-b-deploy',
@@ -414,6 +442,7 @@ export const ITEMS: Item[] = [
     hours: 17,
     video: 8.4,
     factor: 2,
+    url: 'https://www.udemy.com/course/next-js-wordpress/',
   },
   {
     id: 'b-nextpizza',
@@ -423,6 +452,7 @@ export const ITEMS: Item[] = [
     meta: 'Archakov Blog · YouTube',
     note: 'Next.js App Router, TypeScript, Prisma, PostgreSQL, авторизация, корзина, оплата — курс из рекомендаций Google AI. Сюда приходишь уже с Express и SQL в руках, поэтому Server Actions не выглядят магией. 40 ч — оценка, длину плейлиста проверь.',
     hours: 40,
+    url: 'https://www.youtube.com/watch?v=GUwizGbY4cc',
   },
   {
     id: 'b-cicd',
@@ -431,6 +461,7 @@ export const ITEMS: Item[] = [
     title: 'GitHub Actions — CI/CD для своего проекта',
     note: 'Линт + тесты + сборка Docker-образа на push. Хватит документации GitHub и одного вечера. Этот сайт, кстати, деплоится через такой же workflow.',
     hours: 5,
+    url: 'https://docs.github.com/ru/actions',
   },
   {
     id: 'b-react-mid',
@@ -440,6 +471,7 @@ export const ITEMS: Item[] = [
     meta: 'документация Redux Toolkit, react.dev',
     note: 'Redux Toolkit + RTK Query, memo / useMemo / useCallback, кастомные хуки, виртуализация списков. Не отдельный курс, а требования к коду пет-проекта — читаешь и сразу применяешь.',
     hours: 10,
+    url: 'https://redux-toolkit.js.org/',
   },
   {
     id: 'b-pet',
@@ -467,6 +499,7 @@ export const ITEMS: Item[] = [
     note: 'Оба чек-листа говорят «отложить NestJS» — сюда приходишь после пет-проекта. 40 ч — оценка.',
     hours: 40,
     optional: true,
+    url: 'https://www.youtube.com/watch?v=_oR1p79t6gw',
   },
   {
     id: 'b-hardening',
@@ -477,6 +510,7 @@ export const ITEMS: Item[] = [
     note: 'Из «дополнительных слоёв» DeepSeek: CSRF/XSS/SQL-инъекции, rate limiting, CORS, логирование и алерты. Читаешь и добавляешь в пет-проект — так это и запоминается.',
     hours: 10,
     optional: true,
+    url: 'https://owasp.org/www-project-top-ten/',
   },
   {
     id: 'b-pixi',
@@ -487,6 +521,7 @@ export const ITEMS: Item[] = [
     note: 'Специализация из чек-листа DeepSeek: 2D-рендеринг, анимации, канвас. Берётся вместе с вариантом Б пет-проекта (карточная игра). 30 ч — оценка.',
     hours: 30,
     optional: true,
+    url: 'https://pixijs.com/8.x/guides/getting-started/intro',
   },
   {
     id: 'b-rn',
@@ -499,6 +534,7 @@ export const ITEMS: Item[] = [
     video: 41,
     factor: 2,
     optional: true,
+    url: 'https://www.udemy.com/course/the-best-react-native-course/',
   },
 ]
 

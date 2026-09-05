@@ -215,6 +215,31 @@ interface StepItemProps {
   onSkip: (id: string) => void
 }
 
+/** Подпись ссылки по домену: пользователь должен понимать, куда уйдёт, ещё до клика */
+function sourceLabel(url: string): string {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, '')
+    if (host.endsWith('udemy.com')) return 'Курс на Udemy'
+    if (host.endsWith('youtube.com') || host === 'youtu.be') return 'Плейлист на YouTube'
+    return `Материал: ${host}`
+  } catch {
+    return 'Материал'
+  }
+}
+
+function StepSource({ url }: { url?: string }) {
+  if (!url) return null
+  return (
+    <p className="step__source">
+      <a className="step__source-link" href={url} target="_blank" rel="noopener noreferrer">
+        {sourceLabel(url)}
+        <span aria-hidden="true"> ↗</span>
+        <span className="visually-hidden"> (откроется в новой вкладке)</span>
+      </a>
+    </p>
+  )
+}
+
 function StepItem({ step, checked, scheduled, isSkipped, onToggle, onSkip }: StepItemProps) {
   const item: Item = step.item
   const locked = Boolean(item.done)
@@ -230,6 +255,7 @@ function StepItem({ step, checked, scheduled, isSkipped, onToggle, onSkip }: Ste
           {item.meta && <span className="step__meta"> · {item.meta}</span>}
           <span className="badge badge--skipped">отложено</span>
         </p>
+        <StepSource url={item.url} />
         <p className="step__hours">
           <span className="step__hours-value">{fmtHours(item.hours)} ч</span>
           <button type="button" className="link-button step__defer" onClick={() => onSkip(item.id)}>
@@ -262,6 +288,7 @@ function StepItem({ step, checked, scheduled, isSkipped, onToggle, onSkip }: Ste
         {item.kind === 'practice' && <span className="badge badge--practice">практика</span>}
         {item.optional && <span className="badge badge--optional">по желанию</span>}
       </label>
+      <StepSource url={item.url} />
       <details className="step__details">
         <summary className="step__details-summary">что именно проходить</summary>
         <p className="step__note" id={noteId}>{item.note}</p>
